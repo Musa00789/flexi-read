@@ -1,0 +1,27 @@
+<app-header></app-header>
+<div class="categories-container">
+  <h2 class="text-center my-4">Explore Categories</h2>
+  <div class="row g-4">
+    <div class="col-md-4" *ngFor="let category of loadedCategories">
+      <div class="card h-100">
+        <div
+          class="card-img-top"
+          [ngStyle]="{ 'background-image': 'url(' + category.image + ')' }"
+        ></div>
+        <div class="card-body text-center">
+          <h5 class="card-title">{{ category.name }}</h5>
+          <button
+            class="btn btn-primary w-100"
+            (click)="viewCategory(category.id)"
+          >
+            View Books
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sentinel for IntersectionObserver -->
+  <div class="sentinel"></div>
+</div>
+<app-footer></app-footer>

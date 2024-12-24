@@ -1,6 +1,7 @@
 <div class="auth-container">
   <div class="form-container">
-    <h2>Sign Up</h2>
+    <img src="non-fictional.jpg" alt="BookStore Logo" class="logo" />
+    <h2 class="text-primary">Sign Up</h2>
 
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
@@ -78,10 +79,37 @@
         </div>
       </div>
 
-      <button type="submit" [disabled]="signupForm.invalid">Sign Up</button>
+      <div class="form-group remember-me">
+        <label>
+          <input type="checkbox" formControlName="terms" />
+          I agree to the
+          <a href="#" class="text-primary">Terms and Conditions</a>
+        </label>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="signupForm.invalid"
+        class="btn btn-primary w-100 mt-3"
+      >
+        Sign Up
+      </button>
     </form>
 
-    <button class="toggle" routerLink="/login">
+    <div class="divider">Or Sign Up with</div>
+
+    <div class="social-login">
+      <button class="google-login">
+        <img src="google.png" alt="Google Icon" />
+        Login with Google
+      </button>
+      <button class="facebook-login">
+        <img src="facebook.png" alt="Facebook Icon" />
+        Login with Facebook
+      </button>
+    </div>
+
+    <button class="toggle btn btn-link mt-3" routerLink="/login">
       Already have an account? Login
     </button>
   </div>

@@ -1,0 +1,66 @@
+<app-header></app-header>
+<div class="sell-book-container">
+  <h2 class="text-center my-4">Sell Your Book</h2>
+  <form [formGroup]="sellBookForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="title">Book Title</label>
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        placeholder="Enter book title"
+      />
+      <div
+        *ngIf="
+          sellBookForm.get('title').invalid && sellBookForm.get('title').touched
+        "
+        class="error"
+      >
+        Title is required.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="author">Author</label>
+      <input
+        id="author"
+        type="text"
+        formControlName="author"
+        placeholder="Enter book author"
+      />
+      <div
+        *ngIf="
+          sellBookForm.get('author').invalid &&
+          sellBookForm.get('author').touched
+        "
+        class="error"
+      >
+        Author is required.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="category">Category</label>
+      <select id="category" formControlName="category">
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input
+        id="price"
+        type="number"
+        formControlName="price"
+        placeholder="Enter price"
+      />
+    </div>
+    <button
+      type="submit"
+      [disabled]="sellBookForm.invalid"
+      class="btn btn-primary"
+    >
+      Submit
+    </button>
+  </form>
+</div>
+<app-footer></app-footer>

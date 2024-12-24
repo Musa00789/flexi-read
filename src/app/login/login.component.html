@@ -1,6 +1,8 @@
 <div class="auth-container">
   <div class="form-container">
-    <h2>Login</h2>
+    <img src="non-fictional.jpg" alt="BookStore Logo" class="logo" />
+    <h2>Welcome Back!</h2>
+    <p>Please login to your account</p>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
@@ -38,10 +40,31 @@
         >
           Password must be at least 6 characters.
         </div>
+        <a routerLink="/forgot-password" class="forgot-password"
+          >Forgot Password?</a
+        >
+      </div>
+
+      <div class="form-group remember-me">
+        <label>
+          <input type="checkbox" formControlName="rememberMe" />
+          Remember Me
+        </label>
       </div>
 
       <button type="submit" [disabled]="loginForm.invalid">Login</button>
     </form>
+
+    <div class="social-login">
+      <button class="google-login">
+        <img src="google.png" alt="Google Icon" />
+        Login with Google
+      </button>
+      <button class="facebook-login">
+        <img src="facebook.png" alt="Facebook Icon" />
+        Login with Facebook
+      </button>
+    </div>
 
     <button class="toggle" routerLink="/signup">
       Don't have an account? Sign up
