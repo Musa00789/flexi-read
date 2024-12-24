@@ -55,8 +55,8 @@
 }
 
 .btn-light:hover {
-  background-color: #e2e6ea;
-  color: #000000;
+  background-color: transparent;
+  color: white;
 }
 
 /* Responsiveness */
