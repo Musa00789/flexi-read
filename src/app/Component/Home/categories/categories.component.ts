@@ -13,7 +13,7 @@ export class CategoriesComponent {
     {
       name: 'Fiction',
       description: 'Explore amazing stories.',
-      image: 'https://via.placeholder.com/150',
+      image: 'Fiction.jpg',
     },
     {
       name: 'Non-fiction',
