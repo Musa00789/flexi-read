@@ -1,34 +1,72 @@
-.categories-container {
-  padding: 2rem;
-  margin-top: 10px;
-  min-height: calc(100vh - 100px);
-  box-sizing: border-box;
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-top: 70px;
 }
 
-.card {
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.main-container {
+  display: flex;
+  flex-grow: 1;
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+app-footer {
+  margin-top: auto;
+  color: #fff;
+  text-align: center;
 }
 
-.card-body h5 {
-  font-size: 1.2rem;
+.filter-container {
+  width: 250px;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-right: 1px solid #ddd;
+}
+
+.filter-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.filter-container li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.filter-container input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.filter-container li:hover label {
+  color: #007bff;
+}
+
+.content-container {
+  padding: 1rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Search bar styles */
+.search-bar {
   margin-bottom: 1rem;
+  margin-left: 250px;
+  width: 40%;
 }
 
-.card-img-top {
-  height: 180px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 8px 8px 0 0;
+/* Books container styles */
+.books-container .card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.sentinel {
-  height: 50px;
+.books-container .card img {
+  object-fit: cover;
+  height: 200px;
+}
+
+.books-container .rating i {
+  color: #ffc107;
 }

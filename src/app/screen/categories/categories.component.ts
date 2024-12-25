@@ -1,89 +1,92 @@
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  ElementRef,
-  Renderer2,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
 import { HeaderComponent } from '../../Component/Home/header/header.component';
 import { FooterComponent } from '../../Component/Home/footer/footer.component';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-categories',
-  imports: [HeaderComponent, FooterComponent, CommonModule],
+  imports: [HeaderComponent, FooterComponent, CommonModule, FormsModule],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.css',
 })
-export class CategoriesComponent implements OnInit, AfterViewInit {
+export class CategoriesComponent implements OnInit {
   categories = [
-    { id: 1, name: 'Fiction', image: '/Fiction.jpg' },
-    { id: 2, name: 'Science', image: '/science.jpg' },
-    { id: 3, name: 'Technology', image: '/technology.jpg' },
-    { id: 4, name: 'History', image: '/history.jpg' },
-    { id: 5, name: 'Art', image: '/art.jpg' },
-    { id: 6, name: 'Biography', image: '/biography.jpg' },
-    { id: 7, name: 'Fantasy', image: '/fantasy.jpg' },
-    { id: 8, name: 'Romance', image: '/romance.jpg' },
-    { id: 9, name: 'Thriller', image: '/thriller.jpg' },
-    { id: 10, name: 'Adventure', image: '/adventure.jpg' },
-    // Add more categories...
+    { id: 1, name: 'Fiction' },
+    { id: 2, name: 'Non-Fiction' },
+    { id: 3, name: 'Science' },
+    { id: 4, name: 'Biography' },
   ];
 
-  loadedCategories: any = [];
-  itemsPerLoad = 6;
-  observer: IntersectionObserver | null = null;
+  books = [
+    {
+      id: 1,
+      name: 'Book One',
+      author: 'Author A',
+      coverImage: 'Fiction.jpg',
+      price: 500,
+      points: null,
+      rating: 4,
+      categoryIds: [1, 2],
+    },
+    {
+      id: 2,
+      name: 'Book Two',
+      author: 'Author B',
+      coverImage: 'Fiction.jpg',
+      price: null,
+      points: 100,
+      rating: 5,
+      categoryIds: [3],
+    },
+    // Add more book objects here
+  ];
 
-  constructor(
-    private el: ElementRef,
-    private renderer: Renderer2,
-    private router: Router
-  ) {}
+  searchQuery: string = '';
+  selectedCategories: Set<number> = new Set();
+  filteredBooks: any[] = [];
 
-  ngOnInit(): void {
-    this.loadMoreCategories();
+  ngOnInit() {
+    this.filteredBooks = [...this.books];
   }
 
-  ngAfterViewInit(): void {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1,
-    };
+  toggleCategory(categoryId: number, event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
 
-    this.observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          this.loadMoreCategories();
-        }
-      });
-    }, options);
-
-    const sentinel = this.el.nativeElement.querySelector('.sentinel');
-    if (sentinel) {
-      this.observer.observe(sentinel);
+    if (isChecked) {
+      this.selectedCategories.add(categoryId);
+    } else {
+      this.selectedCategories.delete(categoryId);
     }
+
+    this.filterBooks();
   }
 
-  loadMoreCategories(): void {
-    const start = this.loadedCategories.length;
-    const end = start + this.itemsPerLoad;
-
-    if (start < this.categories.length) {
-      const newCategories = this.categories.slice(start, end);
-      this.loadedCategories = [...this.loadedCategories, ...newCategories];
-    }
+  isCategorySelected(categoryId: number): boolean {
+    return this.selectedCategories.has(categoryId);
   }
 
-  viewCategory(id: number): void {
-    console.log('View category with ID:', id);
-    // Add navigation or functionality to view the selected category
+  filterBooks() {
+    const query = this.searchQuery.toLowerCase();
+
+    this.filteredBooks = this.books.filter((book) => {
+      const matchesCategory =
+        this.selectedCategories.size === 0 ||
+        book.categoryIds.some((id) => this.selectedCategories.has(id));
+
+      const matchesQuery = book.name.toLowerCase().includes(query);
+
+      return matchesCategory && matchesQuery;
+    });
   }
 
-  ngOnDestroy(): void {
-    if (this.observer) {
-      this.observer.disconnect();
-    }
+  searchBooks() {
+    this.filterBooks();
+  }
+
+  getStars(rating: number): number[] {
+    return Array(rating).fill(0);
   }
 }

@@ -1,27 +1,65 @@
 <app-header></app-header>
-<div class="categories-container">
-  <h2 class="text-center my-4">Explore Categories</h2>
-  <div class="row g-4">
-    <div class="col-md-4" *ngFor="let category of loadedCategories">
-      <div class="card h-100">
-        <div
-          class="card-img-top"
-          [ngStyle]="{ 'background-image': 'url(' + category.image + ')' }"
-        ></div>
-        <div class="card-body text-center">
-          <h5 class="card-title">{{ category.name }}</h5>
-          <button
-            class="btn btn-primary w-100"
-            (click)="viewCategory(category.id)"
-          >
-            View Books
-          </button>
+<div class="page-container d-flex flex-column min-vh-100">
+  <div class="main-container d-flex flex-grow-1">
+    <!-- Filter Section -->
+    <aside class="filter-container">
+      <h3>Categories</h3>
+      <ul>
+        <li *ngFor="let category of categories">
+          <input
+            type="checkbox"
+            id="category-{{ category.id }}"
+            [checked]="isCategorySelected(category.id)"
+            (change)="toggleCategory(category.id, $event)"
+          />
+          <label for="category-{{ category.id }}">{{ category.name }}</label>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="content-container flex-grow-1">
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search books by name..."
+          [(ngModel)]="searchQuery"
+          (input)="searchBooks()"
+        />
+      </div>
+
+      <!-- Books Section -->
+      <div class="row g-4 books-container">
+        <div class="col-md-2" *ngFor="let book of filteredBooks">
+          <div class="card h-100">
+            <img
+              [src]="book.coverImage"
+              alt="{{ book.name }}"
+              class="card-img-top"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ book.name }}</h5>
+              <p class="card-text">Author: {{ book.author }}</p>
+              <p class="card-text">
+                <strong>Price:</strong>
+                {{ book.price ? book.price + " PKR" : book.points + " Points" }}
+              </p>
+              <div class="rating">
+                <span *ngFor="let star of getStars(book.rating)">
+                  <i class="fas fa-star"></i>
+                </span>
+                <span *ngIf="book.rating < 5">
+                  <i class="far fa-star"></i>
+                </span>
+              </div>
+              <button class="btn btn-primary w-100">Buy</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Sentinel for IntersectionObserver -->
-  <div class="sentinel"></div>
+  <app-footer></app-footer>
 </div>
-<app-footer></app-footer>
