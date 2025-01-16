@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { HeaderComponent } from '../../Component/Home/header/header.component';
 import { FooterComponent } from '../../Component/Home/footer/footer.component';
 import { Router } from '@angular/router';
+import { AuthService } from '../../Services/authService';
 
 @Component({
   selector: 'app-categories',
@@ -18,6 +19,13 @@ export class CategoriesComponent implements OnInit {
     { id: 2, name: 'Non-Fiction' },
     { id: 3, name: 'Science' },
     { id: 4, name: 'Biography' },
+    { id: 4, name: 'History' },
+    { id: 4, name: 'Geography' },
+    { id: 4, name: 'Computer' },
+    { id: 4, name: 'Coding' },
+    { id: 4, name: 'Stories' },
+    { id: 4, name: 'Todays Special' },
+    { id: 4, name: 'Most Famous' },
   ];
 
   books = [
@@ -41,15 +49,24 @@ export class CategoriesComponent implements OnInit {
       rating: 5,
       categoryIds: [3],
     },
-    // Add more book objects here
   ];
 
   searchQuery: string = '';
   selectedCategories: Set<number> = new Set();
   filteredBooks: any[] = [];
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.filteredBooks = [...this.books];
+    this.authService.validateToken().subscribe({
+      next: (response) => {
+        console.log('Token is valid', response);
+      },
+      error: (err) => {
+        console.error('Token validation failed', err);
+        this.router.navigate(['/login']); // Redirect to login if invalid
+      },
+    });
   }
 
   toggleCategory(categoryId: number, event: Event) {
