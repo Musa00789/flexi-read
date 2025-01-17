@@ -1,0 +1,20 @@
+.container {
+  width: 100%;
+  min-height: 86vh;
+  margin-top: 66px;
+}
+
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.card-title {
+  margin-bottom: 10px;
+}
+
+.list-group-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

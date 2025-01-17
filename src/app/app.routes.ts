@@ -5,14 +5,23 @@ import { HomeComponent } from './screen/home/home.component';
 import { CategoriesComponent } from './screen/categories/categories.component';
 import { SellABookComponent } from './screen/sell-a-book/sell-a-book.component';
 import { AuthGuard } from './AuthGuard';
+import { DashboardComponent } from './screen/dashboard/dashboard.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'dashboard', component: HomeComponent },
-  { path: 'categories', component: CategoriesComponent },
   {
-    path: 'seller/view',
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'categories',
+    component: CategoriesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'sell-a-book',
     component: SellABookComponent,
     canActivate: [AuthGuard],
   },

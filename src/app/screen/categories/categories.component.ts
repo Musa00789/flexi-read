@@ -64,7 +64,7 @@ export class CategoriesComponent implements OnInit {
       },
       error: (err) => {
         console.error('Token validation failed', err);
-        this.router.navigate(['/login']); // Redirect to login if invalid
+        this.router.navigate(['/login']);
       },
     });
   }

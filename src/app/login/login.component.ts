@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
           (response) => {
             console.log('Login successful', response);
             localStorage.setItem('token', response.token);
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/home']);
           },
           (error) => {
             console.error('Login failed', error);
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('token', response.token);
             // const token = localStorage.getItem('token');
             // console.log('token from storage', token);
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/home']);
           },
           (error) => {
             console.error('Login failed', error);
