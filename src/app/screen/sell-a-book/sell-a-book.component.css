@@ -2,7 +2,8 @@
   padding: 2rem;
   max-width: 600px;
   margin: 0 auto;
-  height: 92vh;
+  margin-top: 20px;
+  height: 93vh;
 }
 
 form .form-group {

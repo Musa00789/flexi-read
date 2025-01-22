@@ -1,4 +1,4 @@
-<app-header></app-header>
+<!-- <app-header></app-header>
 <div class="sell-book-container">
   <h2 class="text-center my-4">Sell Your Book</h2>
   <form [formGroup]="sellBookForm" (ngSubmit)="onSubmit()">
@@ -40,6 +40,7 @@
     <div class="form-group">
       <label for="category">Category</label>
       <select id="category" formControlName="category">
+        <option>Select One</option>
         <option *ngFor="let category of categories" [value]="category.id">
           {{ category.name }}
         </option>
@@ -54,6 +55,15 @@
         placeholder="Enter price"
       />
     </div>
+    <div class="form-group">
+      <label for="price">Upload File</label>
+      <input
+        id="file"
+        type="file"
+        formControlName="file"
+        placeholder="Select a PDF file"
+      />
+    </div>
     <button
       type="submit"
       [disabled]="sellBookForm.invalid"
@@ -63,4 +73,140 @@
     </button>
   </form>
 </div>
+<app-footer></app-footer> -->
+<app-header></app-header>
+
+<div class="publisher-portfolio container my-4">
+  <h2 class="text-center">Publisher Portfolio</h2>
+
+  <!-- Uploaded Books Section -->
+  <div class="uploaded-books my-4">
+    <h3>Uploaded Books</h3>
+    <div *ngIf="books.length === 0" class="text-muted">
+      No books uploaded yet.
+    </div>
+    <div *ngFor="let book of books" class="card my-2">
+      <div class="card-body">
+        <h5>{{ book.title }}</h5>
+        <p><strong>Author:</strong> {{ book.author }}</p>
+        <p><strong>Category:</strong> {{ getCategoryName(book.category) }}</p>
+        <p><strong>Price:</strong> ${{ book.price }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Book Button -->
+  <div class="text-center">
+    <button class="btn btn-primary" (click)="openUploadModal()">
+      Upload a New Book
+    </button>
+  </div>
+</div>
+
+<!-- Upload Book Modal -->
+<div
+  class="modal fade"
+  id="uploadBookModal"
+  tabindex="-1"
+  aria-labelledby="uploadBookModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadBookModalLabel">Upload a New Book</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- Your form content here -->
+        <form [formGroup]="sellBookForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="title">Book Title</label>
+            <input
+              id="title"
+              type="text"
+              formControlName="title"
+              placeholder="Enter book title"
+              class="form-control"
+            />
+            <div
+              *ngIf="
+                sellBookForm.get('title').invalid &&
+                sellBookForm.get('title').touched
+              "
+              class="text-danger"
+            >
+              Title is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="author">Author</label>
+            <input
+              id="author"
+              type="text"
+              formControlName="author"
+              placeholder="Enter book author"
+              class="form-control"
+            />
+            <div
+              *ngIf="
+                sellBookForm.get('author').invalid &&
+                sellBookForm.get('author').touched
+              "
+              class="text-danger"
+            >
+              Author is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select
+              id="category"
+              formControlName="category"
+              class="form-control"
+            >
+              <option value="">Select One</option>
+              <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input
+              id="price"
+              type="number"
+              formControlName="price"
+              placeholder="Enter price"
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
+            <label for="file">Upload File</label>
+            <input
+              id="filePath"
+              type="file"
+              formControlName="filePath"
+              class="form-control"
+              placeholder="Select a PDF file"
+            />
+          </div>
+          <button
+            type="submit"
+            [disabled]="sellBookForm.invalid"
+            class="btn btn-primary mt-3"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <app-footer></app-footer>

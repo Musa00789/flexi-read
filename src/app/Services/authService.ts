@@ -1,12 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: any
+  ) {}
 
   private baseUrlUser = 'http://localhost:5000/api/auth';
   // private baseUrlAdmin = 'http://localhost:5000/api/admin';
@@ -19,6 +23,10 @@ export class AuthService {
       return !!localStorage.getItem('token');
     }
     return false;
+  }
+
+  private isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
   }
 
   login(credentials: { email: string; password: string }): Observable<any> {
@@ -68,14 +76,65 @@ export class AuthService {
   }
 
   validateToken(): Observable<any> {
-    const token = localStorage.getItem('token');
-    if (!token) throw new Error('No token found');
-    return this.http.post(
-      `${this.baseUrlUser}/validate`,
-      {},
-      {
-        headers: { Authorization: `Bearer ${token}` },
+    try {
+      if (!this.isBrowser()) {
+        throw new Error('Cannot validate token on the server.');
       }
-    );
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No token found');
+      }
+
+      return this.http.post(
+        `${this.baseUrlUser}/validate`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      return new Observable<any>((observer) => {
+        observer.error(error);
+      });
+    }
+  }
+  getDashboardData(): Observable<any> {
+    const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get<any>(`${this.baseUrlUser}/dashboard`, { headers });
+  }
+
+  generateSaleReport(): Observable<any> {
+    const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get(`${this.baseUrlUser}/sales-report`, {
+      responseType: 'blob',
+      headers,
+    });
+  }
+
+  loadBooks(): Observable<any> {
+    const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get(`${this.baseUrlUser}/books`, { headers });
+  }
+
+  // Upload a new book
+  uploadBook(data: FormData): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.post(`${this.baseUrlUser}/uploadBook`, data, { headers });
   }
 }
