@@ -14,42 +14,30 @@ import { AuthService } from '../../Services/authService';
   styleUrl: './categories.component.css',
 })
 export class CategoriesComponent implements OnInit {
-  categories = [
-    { id: 1, name: 'Fiction' },
-    { id: 2, name: 'Non-Fiction' },
-    { id: 3, name: 'Science' },
-    { id: 4, name: 'Biography' },
-    { id: 4, name: 'History' },
-    { id: 4, name: 'Geography' },
-    { id: 4, name: 'Computer' },
-    { id: 4, name: 'Coding' },
-    { id: 4, name: 'Stories' },
-    { id: 4, name: 'Todays Special' },
-    { id: 4, name: 'Most Famous' },
-  ];
-
-  books = [
-    {
-      id: 1,
-      name: 'Book One',
-      author: 'Author A',
-      coverImage: 'Fiction.jpg',
-      price: 500,
-      points: null,
-      rating: 4,
-      categoryIds: [1, 2],
-    },
-    {
-      id: 2,
-      name: 'Book Two',
-      author: 'Author B',
-      coverImage: 'Fiction.jpg',
-      price: null,
-      points: 100,
-      rating: 5,
-      categoryIds: [3],
-    },
-  ];
+  categories: any[] = [];
+  books: any[] = [];
+  // books = [
+  //   {
+  //     id: 1,
+  //     name: 'Book One',
+  //     author: 'Author A',
+  //     coverImage: 'Fiction.jpg',
+  //     price: 500,
+  //     points: null,
+  //     rating: 4,
+  //     categoryIds: [1, 2],
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'Book Two',
+  //     author: 'Author B',
+  //     coverImage: 'Fiction.jpg',
+  //     price: null,
+  //     points: 100,
+  //     rating: 5,
+  //     categoryIds: [3],
+  //   },
+  // ];
 
   searchQuery: string = '';
   selectedCategories: Set<number> = new Set();
@@ -58,6 +46,27 @@ export class CategoriesComponent implements OnInit {
 
   ngOnInit() {
     this.filteredBooks = [...this.books];
+
+    this.authService.getCategories().subscribe({
+      next: (response) => {
+        this.categories = response;
+      },
+      error: () => {
+        this.categories = [];
+        console.error('Failed to fetch categories');
+      },
+    });
+
+    this.authService.loadBooks().subscribe({
+      next: (response) => {
+        this.books = response;
+        console.log('Books loaded.');
+      },
+      error: (err) => {
+        console.log('error fetching books: ' + err);
+      },
+    });
+
     this.authService.validateToken().subscribe({
       next: (response) => {
         console.log('Token is valid', response);
@@ -85,13 +94,29 @@ export class CategoriesComponent implements OnInit {
     return this.selectedCategories.has(categoryId);
   }
 
+  // filterBooks() {
+  //   const query = this.searchQuery.toLowerCase();
+
+  //   this.filteredBooks = this.books.filter((book) => {
+  //     const matchesCategory =
+  //       this.selectedCategories.size === 0 ||
+  //       book.categoryIds.some((id: any) => this.selectedCategories.has(id));
+
+  //     const matchesQuery = book.name.toLowerCase().includes(query);
+
+  //     return matchesCategory && matchesQuery;
+  //   });
+  // }
+
   filterBooks() {
     const query = this.searchQuery.toLowerCase();
 
     this.filteredBooks = this.books.filter((book) => {
       const matchesCategory =
         this.selectedCategories.size === 0 ||
-        book.categoryIds.some((id) => this.selectedCategories.has(id));
+        book.categories.some((category: any) =>
+          this.selectedCategories.has(category._id)
+        );
 
       const matchesQuery = book.name.toLowerCase().includes(query);
 

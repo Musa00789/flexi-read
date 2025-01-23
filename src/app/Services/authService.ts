@@ -137,4 +137,25 @@ export class AuthService {
 
     return this.http.post(`${this.baseUrlUser}/uploadBook`, data, { headers });
   }
+  getCategories(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get(`${this.baseUrlUser}/getCategories`, { headers });
+  }
+  addCategory(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get(`${this.baseUrlUser}/addCategory`, { headers });
+  }
+  deleteCategory(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get(`${this.baseUrlUser}/getCategory`, { headers });
+  }
 }
