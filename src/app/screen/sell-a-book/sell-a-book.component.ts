@@ -26,13 +26,7 @@ import * as bootstrap from 'bootstrap';
 })
 export class SellABookComponent implements OnInit {
   sellBookForm: FormGroup | any;
-  categories = [
-    { id: 1, name: 'Fiction' },
-    { id: 2, name: 'Science' },
-    { id: 3, name: 'Technology' },
-    { id: 4, name: 'History' },
-    { id: 5, name: 'Art' },
-  ];
+  categories: any = [];
   books: any = [];
 
   constructor(
@@ -46,7 +40,9 @@ export class SellABookComponent implements OnInit {
       title: ['', Validators.required],
       author: ['', Validators.required],
       category: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(1)]],
+      price: [, [Validators.required, Validators.min(1)]],
+      rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
+      points: [10, [Validators.required, Validators.min(1)]],
       filePath: [null, [Validators.required, Validators.min(1)]],
     });
   }
@@ -60,26 +56,59 @@ export class SellABookComponent implements OnInit {
         this.router.navigate(['/login']);
       },
     });
-    this.authService.loadBooks();
+    this.authService.loadMyBooks().subscribe({
+      next: (response) => {
+        this.books = response;
+      },
+      error: (err) => {
+        console.error('Failed to load books:', err);
+      },
+    });
+    this.authService.getCategories().subscribe({
+      next: (response) => {
+        this.categories = response;
+      },
+      error: (err) => {
+        console.error('Failed to load categories:', err);
+      },
+    });
   }
 
   onSubmit() {
     if (this.sellBookForm.valid) {
-      console.log('Book Details:', this.sellBookForm.value);
-      // alert('Book listed successfully!');
       const formData = new FormData();
       formData.append('title', this.sellBookForm.get('title').value);
       formData.append('author', this.sellBookForm.get('author').value);
       formData.append('category', this.sellBookForm.get('category').value);
       formData.append('price', this.sellBookForm.get('price').value);
-      formData.append('filePath', this.sellBookForm.get('filePath').value);
-      this.authService.uploadBook(formData).subscribe(() => {
-        this.authService.loadBooks(); // Reload books after successful upload
+      formData.append('rating', this.sellBookForm.get('rating').value);
+      formData.append('points', this.sellBookForm.get('points').value);
+      formData.append('file', this.sellBookForm.get('filePath').value); // Append the actual file
+
+      this.authService.uploadBook(formData).subscribe({
+        next: (response) => {
+          console.log('Book uploaded successfully:', response);
+          this.authService.loadMyBooks();
+        },
+        error: (err) => {
+          console.error('Failed to upload book:', err);
+        },
       });
     }
   }
+
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.sellBookForm.patchValue({
+        filePath: file,
+      });
+    }
+  }
+
   getCategoryName(categoryId: number) {
-    return this.categories.find((category) => category.id === categoryId)?.name;
+    return this.categories.find((category: any) => category._id === categoryId)
+      ?.name;
   }
 
   openUploadModal() {

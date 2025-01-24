@@ -16,6 +16,7 @@ import { AuthService } from '../../Services/authService';
 export class CategoriesComponent implements OnInit {
   categories: any[] = [];
   books: any[] = [];
+  types: boolean = true;
   // books = [
   //   {
   //     id: 1,
@@ -57,7 +58,7 @@ export class CategoriesComponent implements OnInit {
       },
     });
 
-    this.authService.loadBooks().subscribe({
+    this.authService.loadAllBooks().subscribe({
       next: (response) => {
         this.books = response;
         console.log('Books loaded.');
@@ -78,7 +79,7 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  toggleCategory(categoryId: number, event: Event) {
+  toggleCategory(categoryId: any, event: Event) {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     if (isChecked) {
@@ -86,11 +87,11 @@ export class CategoriesComponent implements OnInit {
     } else {
       this.selectedCategories.delete(categoryId);
     }
-
+    console.log('Selected categories:', Array.from(this.selectedCategories));
     this.filterBooks();
   }
 
-  isCategorySelected(categoryId: number): boolean {
+  isCategorySelected(categoryId: any): boolean {
     return this.selectedCategories.has(categoryId);
   }
 

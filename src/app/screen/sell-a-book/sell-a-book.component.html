@@ -171,11 +171,15 @@
               class="form-control"
             >
               <option value="">Select One</option>
-              <option *ngFor="let category of categories" [value]="category.id">
+              <option
+                *ngFor="let category of categories"
+                [value]="category._id"
+              >
                 {{ category.name }}
               </option>
             </select>
           </div>
+
           <div class="form-group">
             <label for="price">Price</label>
             <input
@@ -187,13 +191,33 @@
             />
           </div>
           <div class="form-group">
+            <label for="rating">Rating <i class="far fa-star"> </i></label>
+            <input
+              id="rating"
+              type="number"
+              formControlName="rating"
+              placeholder="Enter rating"
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
+            <label for="points">Points <i class="fas fa-book-open"></i></label>
+            <input
+              id="points"
+              type="number"
+              formControlName="points"
+              placeholder="Enter points"
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
             <label for="file">Upload File</label>
             <input
               id="filePath"
               type="file"
               formControlName="filePath"
               class="form-control"
-              placeholder="Select a PDF file"
+              (change)="onFileChange($event)"
             />
           </div>
           <button

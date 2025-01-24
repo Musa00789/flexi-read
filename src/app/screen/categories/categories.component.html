@@ -4,15 +4,16 @@
     <!-- Filter Section -->
     <aside class="filter-container">
       <h3>Categories</h3>
-      <ul>
+      <!-- <a style="cursor: pointer" (click)="types = !types">Types</a> -->
+      <ul *ngIf="types">
         <li *ngFor="let category of categories">
           <input
             type="checkbox"
-            id="category-{{ category.id }}"
-            [checked]="isCategorySelected(category.id)"
-            (change)="toggleCategory(category.id, $event)"
+            id="category-{{ category._id }}"
+            [checked]="isCategorySelected(category._id)"
+            (change)="toggleCategory(category._id, $event)"
           />
-          <label for="category-{{ category.id }}">{{ category.name }}</label>
+          <label for="category-{{ category._id }}">{{ category.name }}</label>
         </li>
       </ul>
     </aside>

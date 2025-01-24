@@ -119,13 +119,17 @@ export class AuthService {
     });
   }
 
-  loadBooks(): Observable<any> {
+  loadAllBooks(): Observable<any> {
+    return this.http.get(`${this.baseUrlUser}/getAllBooks`);
+  }
+
+  loadMyBooks(): Observable<any> {
     const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
 
-    return this.http.get(`${this.baseUrlUser}/books`, { headers });
+    return this.http.get(`${this.baseUrlUser}/getMyBooks`, { headers });
   }
 
   // Upload a new book

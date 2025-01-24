@@ -21,7 +21,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'sell-a-book',
+    path: 'view/sell-a-book',
     component: SellABookComponent,
     canActivate: [AuthGuard],
   },
