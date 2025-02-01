@@ -1,10 +1,15 @@
-.sell-book-container {
+.container {
+  width: 100%;
+  min-height: 86vh;
+  margin-top: 66px;
+}
+/* .sell-book-container {
   padding: 2rem;
   max-width: 600px;
   margin: 0 auto;
   margin-top: 20px;
   height: 93vh;
-}
+} */
 
 form .form-group {
   margin-bottom: 1.5rem;

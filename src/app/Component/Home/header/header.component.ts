@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../Services/authService';
 
 @Component({
@@ -12,12 +12,9 @@ import { AuthService } from '../../../Services/authService';
 })
 export class HeaderComponent implements OnInit {
   isLoggedIn: boolean = false;
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    // this.authService.isLoggedIn$.subscribe((status) => {
-    //   this.isLoggedIn = status;
-    // });
     this.authService.validateToken().subscribe(() => {
       this.isLoggedIn = true;
     });

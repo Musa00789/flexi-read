@@ -44,6 +44,7 @@ export class SellABookComponent implements OnInit {
       rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
       points: [10, [Validators.required, Validators.min(1)]],
       filePath: [null, [Validators.required, Validators.min(1)]],
+      bookCoverImage: [null, [Validators.required, Validators.min(1)]],
     });
   }
   ngOnInit(): void {
@@ -83,12 +84,17 @@ export class SellABookComponent implements OnInit {
       formData.append('price', this.sellBookForm.get('price').value);
       formData.append('rating', this.sellBookForm.get('rating').value);
       formData.append('points', this.sellBookForm.get('points').value);
-      formData.append('file', this.sellBookForm.get('filePath').value); // Append the actual file
+      formData.append('file', this.sellBookForm.get('filePath').value);
+      formData.append(
+        'bookCoverImage',
+        this.sellBookForm.get('bookCoverImage').value
+      );
 
       this.authService.uploadBook(formData).subscribe({
         next: (response) => {
           console.log('Book uploaded successfully:', response);
           this.authService.loadMyBooks();
+          this.closeUploadModal();
         },
         error: (err) => {
           console.error('Failed to upload book:', err);
@@ -104,6 +110,17 @@ export class SellABookComponent implements OnInit {
         filePath: file,
       });
     }
+  }
+  onImageChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.sellBookForm.patchValue({
+        bookCoverImage: file,
+      });
+    }
+  }
+  getStars(rating: number): number[] {
+    return new Array(Math.floor(rating));
   }
 
   getCategoryName(categoryId: number) {
@@ -121,6 +138,22 @@ export class SellABookComponent implements OnInit {
             keyboard: true,
           });
           modalInstance.show();
+        }
+      });
+    } else {
+      console.error('Bootstrap modals cannot run during SSR');
+    }
+  }
+  closeUploadModal() {
+    if (isPlatformBrowser(this.platformId)) {
+      import('bootstrap').then((bootstrap) => {
+        const modalElement = document.getElementById('uploadBookModal');
+        if (modalElement) {
+          const modalInstance = new bootstrap.Modal(modalElement, {
+            backdrop: 'static',
+            keyboard: true,
+          });
+          modalInstance.dispose();
         }
       });
     } else {

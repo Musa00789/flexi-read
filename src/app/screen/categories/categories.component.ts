@@ -46,7 +46,15 @@ export class CategoriesComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.filteredBooks = [...this.books];
+    this.authService.validateToken().subscribe({
+      next: (response) => {
+        console.log('Token is valid', response);
+      },
+      error: (err) => {
+        console.error('Token validation failed', err);
+        this.router.navigate(['/login']);
+      },
+    });
 
     this.authService.getCategories().subscribe({
       next: (response) => {
@@ -58,25 +66,22 @@ export class CategoriesComponent implements OnInit {
       },
     });
 
+    this.filteredBooks = [...this.books];
+
     this.authService.loadAllBooks().subscribe({
       next: (response) => {
-        this.books = response;
-        console.log('Books loaded.');
+        this.books = response.books;
+        this.filteredBooks = [...this.books];
       },
       error: (err) => {
         console.log('error fetching books: ' + err);
       },
     });
+  }
 
-    this.authService.validateToken().subscribe({
-      next: (response) => {
-        console.log('Token is valid', response);
-      },
-      error: (err) => {
-        console.error('Token validation failed', err);
-        this.router.navigate(['/login']);
-      },
-    });
+  getImagePath(filePath: string): string {
+    // Modify according to your backend API URL
+    return `http://localhost:5000/uploads/${filePath.split('\\').pop()}`;
   }
 
   toggleCategory(categoryId: any, event: Event) {
@@ -115,11 +120,11 @@ export class CategoriesComponent implements OnInit {
     this.filteredBooks = this.books.filter((book) => {
       const matchesCategory =
         this.selectedCategories.size === 0 ||
-        book.categories.some((category: any) =>
-          this.selectedCategories.has(category._id)
+        book.category.some((category: any) =>
+          this.selectedCategories.has(category)
         );
 
-      const matchesQuery = book.name.toLowerCase().includes(query);
+      const matchesQuery = book.title.toLowerCase().includes(query);
 
       return matchesCategory && matchesQuery;
     });

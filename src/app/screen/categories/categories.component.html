@@ -36,22 +36,25 @@
         <div class="col-md-2" *ngFor="let book of filteredBooks">
           <div class="card h-100">
             <img
-              [src]="book.coverImage"
-              alt="{{ book.name }}"
+              [src]="book.bookCoverImage"
+              alt="{{ book.title }}"
               class="card-img-top"
+              style="width: 260px; height: 300px; object-fit: cover"
             />
             <div class="card-body">
-              <h5 class="card-title">{{ book.name }}</h5>
-              <p class="card-text">Author: {{ book.author }}</p>
+              <h5 class="card-title">{{ book?.title }}</h5>
+              <p class="card-text">Author: {{ book?.author }}</p>
               <p class="card-text">
                 <strong>Price:</strong>
-                {{ book.price ? book.price + " PKR" : book.points + " Points" }}
+                {{
+                  book?.price ? book?.price + " PKR" : book?.points + " Points"
+                }}
               </p>
               <div class="rating">
-                <span *ngFor="let star of getStars(book.rating)">
+                <span *ngFor="let star of getStars(book?.rating)">
                   <i class="fas fa-star"></i>
                 </span>
-                <span *ngIf="book.rating < 5">
+                <span *ngIf="book?.rating < 5">
                   <i class="far fa-star"></i>
                 </span>
               </div>

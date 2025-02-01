@@ -2,6 +2,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ import { isPlatformBrowser } from '@angular/common';
 export class AuthService {
   constructor(
     private http: HttpClient,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId: any
   ) {}
 
@@ -37,6 +39,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     this.isLoggedInSubject.next(false);
+    this.router.navigate(['/login']);
   }
 
   signUp(credentials: {

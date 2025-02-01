@@ -75,162 +75,237 @@
 </div>
 <app-footer></app-footer> -->
 <app-header></app-header>
+<div class="container">
+  <div class="publisher-portfolio my-4">
+    <h2 class="text-center">Publisher Portfolio</h2>
 
-<div class="publisher-portfolio container my-4">
-  <h2 class="text-center">Publisher Portfolio</h2>
-
-  <!-- Uploaded Books Section -->
-  <div class="uploaded-books my-4">
-    <h3>Uploaded Books</h3>
-    <div *ngIf="books.length === 0" class="text-muted">
-      No books uploaded yet.
+    <!-- Add Book Button -->
+    <div class="text-end">
+      <button class="btn btn-primary" (click)="openUploadModal()">
+        <i class="fas fa-plus"></i> Upload a New Book
+      </button>
     </div>
-    <div *ngFor="let book of books" class="card my-2">
-      <div class="card-body">
-        <h5>{{ book.title }}</h5>
-        <p><strong>Author:</strong> {{ book.author }}</p>
-        <p><strong>Category:</strong> {{ getCategoryName(book.category) }}</p>
-        <p><strong>Price:</strong> ${{ book.price }}</p>
+
+    <!-- Uploaded Books Section -->
+    <div class="uploaded-books my-4">
+      <h3>Uploaded Books</h3>
+      <div *ngIf="books.length === 0" class="text-muted">
+        No books uploaded yet.
+      </div>
+
+      <div class="row g-4 books-container">
+        <div class="col-md-3" *ngFor="let book of books">
+          <div class="card h-100">
+            <!-- Display book cover image -->
+            <img
+              [src]="book.bookCoverImage"
+              alt="{{ book.title }}"
+              class="card-img-top"
+              style="width: 260px; height: 300px; object-fit: cover"
+            />
+
+            <div class="card-body">
+              <!-- Book title -->
+              <h5 class="card-title">{{ book.title }}</h5>
+              <p class="card-text">Author: {{ book.author }}</p>
+              <p class="card-text">
+                <strong>Price:</strong>
+                {{ book.price ? book.price + " PKR" : book.points + " Points" }}
+              </p>
+
+              <!-- Rating stars -->
+              <div class="rating">
+                <span *ngFor="let star of getStars(book.rating)">
+                  <i class="fas fa-star"></i>
+                </span>
+                <span *ngIf="book.rating < 5">
+                  <i class="far fa-star"></i>
+                </span>
+              </div>
+
+              <!-- Buy button -->
+              <button class="btn btn-primary w-100">Buy</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Add Book Button -->
-  <div class="text-center">
-    <button class="btn btn-primary" (click)="openUploadModal()">
-      Upload a New Book
-    </button>
-  </div>
-</div>
-
-<!-- Upload Book Modal -->
-<div
-  class="modal fade"
-  id="uploadBookModal"
-  tabindex="-1"
-  aria-labelledby="uploadBookModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="uploadBookModalLabel">Upload a New Book</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <!-- Your form content here -->
-        <form [formGroup]="sellBookForm" (ngSubmit)="onSubmit()">
-          <div class="form-group">
-            <label for="title">Book Title</label>
-            <input
-              id="title"
-              type="text"
-              formControlName="title"
-              placeholder="Enter book title"
-              class="form-control"
-            />
-            <div
-              *ngIf="
-                sellBookForm.get('title').invalid &&
-                sellBookForm.get('title').touched
-              "
-              class="text-danger"
-            >
-              Title is required.
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="author">Author</label>
-            <input
-              id="author"
-              type="text"
-              formControlName="author"
-              placeholder="Enter book author"
-              class="form-control"
-            />
-            <div
-              *ngIf="
-                sellBookForm.get('author').invalid &&
-                sellBookForm.get('author').touched
-              "
-              class="text-danger"
-            >
-              Author is required.
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="category">Category</label>
-            <select
-              id="category"
-              formControlName="category"
-              class="form-control"
-            >
-              <option value="">Select One</option>
-              <option
-                *ngFor="let category of categories"
-                [value]="category._id"
-              >
-                {{ category.name }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="price">Price</label>
-            <input
-              id="price"
-              type="number"
-              formControlName="price"
-              placeholder="Enter price"
-              class="form-control"
-            />
-          </div>
-          <div class="form-group">
-            <label for="rating">Rating <i class="far fa-star"> </i></label>
-            <input
-              id="rating"
-              type="number"
-              formControlName="rating"
-              placeholder="Enter rating"
-              class="form-control"
-            />
-          </div>
-          <div class="form-group">
-            <label for="points">Points <i class="fas fa-book-open"></i></label>
-            <input
-              id="points"
-              type="number"
-              formControlName="points"
-              placeholder="Enter points"
-              class="form-control"
-            />
-          </div>
-          <div class="form-group">
-            <label for="file">Upload File</label>
-            <input
-              id="filePath"
-              type="file"
-              formControlName="filePath"
-              class="form-control"
-              (change)="onFileChange($event)"
-            />
-          </div>
+  <!-- Upload Book Modal -->
+  <div
+    class="modal fade"
+    id="uploadBookModal"
+    tabindex="-1"
+    aria-labelledby="uploadBookModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="uploadBookModalLabel">
+            Upload a New Book
+          </h5>
           <button
-            type="submit"
-            [disabled]="sellBookForm.invalid"
-            class="btn btn-primary mt-3"
-          >
-            Submit
-          </button>
-        </form>
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <!-- Your form content here -->
+          <form [formGroup]="sellBookForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="title">Book Title</label>
+              <input
+                id="title"
+                type="text"
+                formControlName="title"
+                placeholder="Enter book title"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  sellBookForm.get('title').invalid &&
+                  sellBookForm.get('title').touched
+                "
+                class="text-danger"
+              >
+                Title is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="author">Author</label>
+              <input
+                id="author"
+                type="text"
+                formControlName="author"
+                placeholder="Enter book author"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  sellBookForm.get('author').invalid &&
+                  sellBookForm.get('author').touched
+                "
+                class="text-danger"
+              >
+                Author is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select
+                id="category"
+                formControlName="category"
+                class="form-control"
+              >
+                <option value="">Select One</option>
+                <option
+                  *ngFor="let category of categories"
+                  [value]="category._id"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="price">Price</label>
+              <input
+                id="price"
+                type="number"
+                formControlName="price"
+                placeholder="Enter price"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  sellBookForm.get('price').invalid &&
+                  sellBookForm.get('price').touched
+                "
+                class="text-danger"
+              >
+                <span *ngIf="sellBookForm.get('price').errors.required"
+                  >Price is required.</span
+                >
+                <span *ngIf="sellBookForm.get('price').errors.min"
+                  >Price must be at least 1.</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="rating">Rating <i class="far fa-star"></i></label>
+              <input
+                id="rating"
+                type="number"
+                formControlName="rating"
+                placeholder="Enter rating"
+                class="form-control"
+              />
+              <div
+                *ngIf="
+                  sellBookForm.get('rating').invalid &&
+                  sellBookForm.get('rating').touched
+                "
+                class="text-danger"
+              >
+                <span *ngIf="sellBookForm.get('rating').errors.required"
+                  >Rating is required.</span
+                >
+                <span *ngIf="sellBookForm.get('rating').errors.min"
+                  >Rating must be at least 1.</span
+                >
+                <span *ngIf="sellBookForm.get('rating').errors.max"
+                  >Rating must not exceed 5.</span
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="points"
+                >Points <i class="fas fa-book-open"></i
+              ></label>
+              <input
+                id="points"
+                type="number"
+                formControlName="points"
+                placeholder="Enter points"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label for="image">Upload Cover Image</label>
+              <input
+                id="bookCoverImage"
+                type="file"
+                formControlName="bookCoverImage"
+                class="form-control"
+                (change)="onImageChange($event)"
+              />
+            </div>
+            <div class="form-group">
+              <label for="file">Upload File</label>
+              <input
+                id="filePath"
+                type="file"
+                formControlName="filePath"
+                class="form-control"
+                (change)="onFileChange($event)"
+              />
+            </div>
+            <button
+              type="submit"
+              [disabled]="sellBookForm.invalid"
+              class="btn btn-primary mt-3"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
 <app-footer></app-footer>
