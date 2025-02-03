@@ -1,0 +1,129 @@
+<app-header></app-header>
+<div class="page-container d-flex flex-column min-vh-100">
+  <div class="main-container d-flex flex-grow-1">
+    <div class="profile-container">
+      <div class="profile-card center">
+        <!-- Profile Image -->
+        <div
+          class="profile-pic"
+          (mouseenter)="showEditIcon = true"
+          (mouseleave)="showEditIcon = false"
+        >
+          <img
+            [src]="
+              user?.profilePicture
+                ? user.profilePicture
+                : 'assets/default-avatar.png'
+            "
+            alt="Profile Picture"
+          />
+          <div
+            class="edit-overlay"
+            *ngIf="showEditIcon"
+            (click)="uploadProfilePicture()"
+          >
+            <i class="fa fa-camera"></i>
+          </div>
+          <input
+            type="file"
+            #fileInput
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            hidden
+          />
+        </div>
+
+        <!-- User Info -->
+        <div class="profile-info">
+          <h2>{{ user?.username }}</h2>
+          <p>Email: {{ user?.email }}</p>
+          <p>
+            Role: <strong>{{ user?.role }}</strong>
+          </p>
+          <p>
+            <i class="fas fa-coins coin-icon"></i> :
+            <strong>{{ user?.points }}</strong>
+          </p>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: center; margin-top: 2rem">
+        <button
+          routerLink="/profile/topup-account"
+          class="btn btn-warning mt-2 m-md-1"
+        >
+          Top Up
+        </button>
+        <button class="btn btn-secondary mt-2 m-lg-1">Edit Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- User's Books -->
+  <div class="books-section">
+    <h3>My Books</h3>
+    <h5 class="text-center" *ngIf="!books || books.length === 0">
+      Add Books +<i class="fas fa-book"></i>
+    </h5>
+    <div class="row g-4 books-container">
+      <div class="col-md-2 col-sm-6" *ngFor="let book of books">
+        <div class="card h-100">
+          <img
+            [src]="book.bookCoverImage"
+            alt="{{ book.title }}"
+            class="card-img-top"
+            style="width: 100%; height: 250px; object-fit: cover"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ book.name }}</h5>
+            <p class="card-text">Author: {{ book.author }}</p>
+            <p class="card-text">
+              <strong>Price:</strong>
+              {{ book.price ? book.price + " PKR" : book.points + " Points" }}
+            </p>
+
+            <div class="rating">
+              <span *ngFor="let star of getStars(book.rating)">
+                <i class="fas fa-star"></i>
+              </span>
+              <span *ngIf="book.rating < 5">
+                <i class="far fa-star"></i>
+              </span>
+            </div>
+
+            <button class="btn btn-primary w-100">
+              View <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order History -->
+  <div class="order-history">
+    <h3>Order History</h3>
+    <div class="orders-list">
+      <div *ngFor="let order of orders" class="col-md-2">
+        <div class="card h-100">
+          <img
+            [src]="order?.bookCoverImage"
+            alt="{{ order.title }}"
+            class="card-img-top"
+            style="object-fit: cover"
+          />
+          <div class="card-body">
+            <h5 class="card-title">
+              Order #{{ order.id }} - {{ order.status }}
+            </h5>
+            <p class="card-text">Purchased on: {{ order?.purchaseDate }}</p>
+            <button class="btn btn-success w-100" (click)="viewOrder(order.id)">
+              View Order
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

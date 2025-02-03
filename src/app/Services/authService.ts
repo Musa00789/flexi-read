@@ -103,8 +103,30 @@ export class AuthService {
       });
     }
   }
+  getUser(id: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get<any>(`${this.baseUrlUser}/user/${id}`, { headers });
+  }
+
+  uploadProfile(id: String, picture: FormData): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.post<any>(
+      `${this.baseUrlUser}/uploadProfile/${id}`,
+      picture,
+      {
+        headers,
+      }
+    );
+  }
+
   getDashboardData(): Observable<any> {
-    const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+    const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
@@ -135,6 +157,14 @@ export class AuthService {
     return this.http.get(`${this.baseUrlUser}/getMyBooks`, { headers });
   }
 
+  getBook(id: string): Observable<any> {
+    const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get(`${this.baseUrlUser}/getBook/${id}`, { headers });
+  }
+
   // Upload a new book
   uploadBook(data: FormData): Observable<any> {
     const token = localStorage.getItem('token');
@@ -143,6 +173,59 @@ export class AuthService {
     });
 
     return this.http.post(`${this.baseUrlUser}/uploadBook`, data, { headers });
+  }
+
+  updateBook(id: string, data: FormData): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.put(`${this.baseUrlUser}/updateBook/${id}`, data, {
+      headers,
+    });
+  }
+
+  purchaseBook(id: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.post(
+      `${this.baseUrlUser}/purchaseBook/${id}`,
+      {},
+      {
+        headers,
+      }
+    );
+  }
+
+  myPurchases(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get(`${this.baseUrlUser}/myPurchases`, { headers });
+  }
+
+  getUserPoints(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get(`${this.baseUrlUser}/getUserPoints`, { headers });
+  }
+
+  deleteBook(id: String): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.delete(`${this.baseUrlUser}/deleteBook/${id}`, {
+      headers,
+    });
   }
   getCategories(): Observable<any> {
     const token = localStorage.getItem('token');
@@ -164,5 +247,13 @@ export class AuthService {
       Authorization: `Bearer ${token}`,
     });
     return this.http.get(`${this.baseUrlUser}/getCategory`, { headers });
+  }
+
+  getMyOrders(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get(`${this.baseUrlUser}/getMyOrders`, { headers });
   }
 }

@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit {
     recentActivity: [],
   };
   books: any[] = [];
+  myBooks: any[] = [];
   page: number = 1;
   limit: number = 10;
   loading: boolean = false;
@@ -49,6 +50,7 @@ export class DashboardComponent implements OnInit {
         console.log('error fetching books: ' + err);
       },
     });
+    this.myPurchases();
   }
 
   loadBooks() {
@@ -60,6 +62,17 @@ export class DashboardComponent implements OnInit {
       this.hasMoreBooks = response.currentPage < response.totalPages;
       this.page++;
       this.loading = false;
+    });
+  }
+  myPurchases() {
+    this.authService.myPurchases().subscribe({
+      next: (response) => {
+        console.log('Purchases loaded.', response);
+        this.myBooks = response.books;
+      },
+      error: (err) => {
+        console.log('error fetching purchases: ' + err);
+      },
     });
   }
 

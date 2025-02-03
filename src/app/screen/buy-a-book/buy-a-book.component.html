@@ -1,0 +1,157 @@
+<app-header></app-header>
+<div class="page-container d-flex flex-column min-vh-100">
+  <div class="main-container d-flex flex-grow-1">
+    <div class="container mt-4">
+      <div class="row book-details-container">
+        <div class="col-md-2 d-flex justify-content-start">
+          <img
+            [src]="
+              book?.bookCoverImage
+                ? book?.bookCoverImage
+                : 'assets/images/book-placeholder.png'
+            "
+            alt="{{ book?.title }}"
+            class="book-image img-fluid rounded shadow"
+          />
+        </div>
+
+        <div class="col-md-4 d-flex flex-column justify-content-start">
+          <h2 class="book-title">{{ book?.title }}</h2>
+          <p class="book-author"><strong>Author:</strong> {{ book?.author }}</p>
+          <p class="book-price">
+            <strong>Rs: </strong>
+            <span class="price-text">{{ book?.price }} </span><br />
+            OR<br />
+            <i class="fas fa-coins"></i>
+            <span class="price-text"> : {{ book?.price * 4 }} BP</span>
+          </p>
+          <button
+            class="btn btn-primary btn-lg mt-3"
+            (click)="openPurchaseModal()"
+          >
+            Buy Now!
+          </button>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="suggested-books">
+        <h3 class="text-center">📚 You may also like</h3>
+        <div class="book-gallery">
+          <div
+            class="book-card"
+            *ngFor="let suggestion of suggestedBooks"
+            (click)="navigateToBook(suggestion.id)"
+          >
+            <img
+              [src]="suggestion?.bookCoverImage"
+              alt="{{ suggestion?.title }}"
+            />
+            <p class="book-title">{{ suggestion?.title }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="purchaseModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Checkout</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Tabs -->
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a
+                  class="nav-link active"
+                  data-bs-toggle="tab"
+                  href="#payWithPoints"
+                  >Pay with Points</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#topUp"
+                  >Top-Up</a
+                >
+              </li>
+            </ul>
+
+            <div class="tab-content mt-3">
+              <div class="tab-pane fade show active" id="payWithPoints">
+                <p>
+                  You have <strong>{{ points }}</strong> points.
+                </p>
+                <button
+                  class="btn btn-success"
+                  (click)="usePointsForCheckout()"
+                >
+                  Pay with Points
+                </button>
+              </div>
+
+              <div class="tab-pane fade" id="topUp">
+                <form (ngSubmit)="proceedWithCardPayment()">
+                  <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input
+                      type="text"
+                      id="cardNumber"
+                      class="form-control"
+                      [(ngModel)]="cardDetails.cardNumber"
+                      name="cardNumber"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="expiryMonth">Expiry Month</label>
+                    <input
+                      type="number"
+                      id="expiryMonth"
+                      class="form-control"
+                      [(ngModel)]="cardDetails.expiryMonth"
+                      name="expiryMonth"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="expiryYear">Expiry Year</label>
+                    <input
+                      type="number"
+                      id="expiryYear"
+                      class="form-control"
+                      [(ngModel)]="cardDetails.expiryYear"
+                      name="expiryYear"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input
+                      type="number"
+                      id="cvv"
+                      class="form-control"
+                      [(ngModel)]="cardDetails.cvv"
+                      name="cvv"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-primary mt-3">
+                    Proceed with Payment
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

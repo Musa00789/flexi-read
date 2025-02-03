@@ -18,3 +18,18 @@
   align-items: center;
   gap: 10px;
 }
+.books-container .card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.books-container .card img {
+  width: 100%; /* Ensures image adapts to the container width */
+  max-width: 100%; /* Prevents the image from overflowing */
+  height: auto; /* Maintains aspect ratio */
+  max-height: 200px; /* Ensures image does not exceed 200px height */
+  object-fit: cover; /* Keeps the image properly cropped */
+}
+
+.books-container .rating i {
+  color: #ffc107;
+}

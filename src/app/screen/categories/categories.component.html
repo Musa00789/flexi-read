@@ -4,8 +4,7 @@
     <!-- Filter Section -->
     <aside class="filter-container">
       <h3>Categories</h3>
-      <!-- <a style="cursor: pointer" (click)="types = !types">Types</a> -->
-      <ul *ngIf="types">
+      <ul>
         <li *ngFor="let category of categories">
           <input
             type="checkbox"
@@ -31,12 +30,32 @@
         />
       </div>
 
+      <div class="d-flex justify-content-center mb-3">
+        <ul class="nav nav-pills w-50">
+          <li style="cursor: pointer" class="nav-item w-50">
+            <a
+              class="nav-link text-center w-100"
+              [class.active]="types"
+              (click)="toggleTab('all')"
+              >All Books</a
+            >
+          </li>
+          <li style="cursor: pointer" class="nav-item w-50">
+            <a
+              class="nav-link text-center w-100"
+              [class.active]="!types"
+              (click)="toggleTab('owned')"
+              >Owned Books</a
+            >
+          </li>
+        </ul>
+      </div>
       <!-- Books Section -->
       <div class="row g-4 books-container">
         <div class="col-md-2" *ngFor="let book of filteredBooks">
           <div class="card h-100">
             <img
-              [src]="book.bookCoverImage"
+              [src]="book?.bookCoverImage"
               alt="{{ book.title }}"
               class="card-img-top"
               style="width: 260px; height: 300px; object-fit: cover"
@@ -58,7 +77,12 @@
                   <i class="far fa-star"></i>
                 </span>
               </div>
-              <button class="btn btn-primary w-100">Buy</button>
+              <button
+                [routerLink]="['/view/buy-a-book', book?._id]"
+                class="btn btn-primary w-100"
+              >
+                Buy
+              </button>
             </div>
           </div>
         </div>
