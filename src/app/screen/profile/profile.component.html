@@ -48,7 +48,7 @@
       </div>
       <div style="display: flex; justify-content: center; margin-top: 2rem">
         <button
-          routerLink="/profile/topup-account"
+          [routerLink]="['/profile/topup-account', user?._id]"
           class="btn btn-warning mt-2 m-md-1"
         >
           Top Up

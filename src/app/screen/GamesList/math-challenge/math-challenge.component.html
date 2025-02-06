@@ -1,0 +1,17 @@
+<app-header></app-header>
+<div class="page-container d-flex flex-column min-vh-100">
+  <div class="main-container d-flex flex-grow-1">
+    <div class="math-container">
+      <h2>Math Challenge</h2>
+      <p class="problem">{{ num1 }} + {{ num2 }} = ?</p>
+      <div class="options">
+        <button *ngFor="let option of options" (click)="submitAnswer(option)">
+          {{ option }}
+        </button>
+      </div>
+      <p class="message">{{ message }}</p>
+      <p>Points Earned: {{ points }} / {{ maxPoints }}</p>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

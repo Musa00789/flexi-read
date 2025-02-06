@@ -1,24 +1,22 @@
 <app-header></app-header>
-<div class="container">
+<div class="container enhanced-container">
   <div class="publisher-portfolio my-4">
-    <h2 class="text-center">Publisher Portfolio</h2>
-
-    <!-- Add Book Button -->
-    <div class="text-end">
-      <button class="btn btn-primary" (click)="openUploadModal()">
+    <!-- Upload Book Button -->
+    <div class="text-end mb-3">
+      <button class="btn btn-primary btn-upload" (click)="openUploadModal()">
         <i class="fas fa-plus"></i> Upload a New Book
       </button>
     </div>
 
     <!-- Uploaded Books Section -->
     <div class="uploaded-books my-4">
-      <h3>Uploaded Books</h3>
-      <div *ngIf="books.length === 0" class="text-muted">
+      <h3 class="section-title">My Works</h3>
+      <div *ngIf="books.length === 0" class="text-muted no-books">
         No books uploaded yet.
       </div>
 
       <div class="row g-4 books-container">
-        <div class="col-md-2" *ngFor="let book of books">
+        <div class="col-md-3 col-sm-6" *ngFor="let book of books">
           <div class="card h-100 book-card">
             <!-- Edit Icon -->
             <div class="edit-icon" (click)="openEditModal(book)">
@@ -28,21 +26,23 @@
             <img
               [src]="book.bookCoverImage"
               alt="{{ book.title }}"
-              class="card-img-top"
-              style="width: 260px; height: 300px; object-fit: cover"
+              class="card-img-top book-cover"
             />
 
             <div class="card-body">
               <h5 class="card-title">{{ book.title }}</h5>
-              <p class="card-text">Author: {{ book.author }}</p>
+              <p class="card-text">
+                <strong>Author:</strong> {{ book.author }}
+              </p>
               <p class="card-text">
                 <strong>Price:</strong>
                 {{ book.price ? book.price + " PKR" : book.points + " Points" }}
               </p>
-
+            </div>
+            <div class="card-footer text-center">
               <button
                 (click)="confirmDelete(book._id)"
-                class="btn btn-primary w-100"
+                class="btn btn-outline-danger btn-sm"
               >
                 <i class="fas fa-trash"></i> Delete
               </button>
@@ -61,9 +61,9 @@
     aria-labelledby="uploadBookModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header enhanced-modal-header">
           <h5 class="modal-title" id="uploadBookModalLabel">
             Upload a New Book
           </h5>
@@ -75,7 +75,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <!-- Your form content here -->
+          <!-- Form Content -->
           <form [formGroup]="sellBookForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
               <label for="title">Book Title</label>
@@ -131,59 +131,63 @@
                 </option>
               </select>
             </div>
-
-            <div class="form-group">
-              <label for="price">Price</label>
-              <input
-                id="price"
-                type="number"
-                formControlName="price"
-                placeholder="Enter price"
-                class="form-control"
-              />
-              <div
-                *ngIf="
-                  sellBookForm.get('price').invalid &&
-                  sellBookForm.get('price').touched
-                "
-                class="text-danger"
-              >
-                <span *ngIf="sellBookForm.get('price').errors.required"
-                  >Price is required.</span
-                >
-                <span *ngIf="sellBookForm.get('price').errors.min"
-                  >Price must be at least 1.</span
-                >
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="price">Price</label>
+                  <input
+                    id="price"
+                    type="number"
+                    formControlName="price"
+                    placeholder="Enter price"
+                    class="form-control"
+                  />
+                  <div
+                    *ngIf="
+                      sellBookForm.get('price').invalid &&
+                      sellBookForm.get('price').touched
+                    "
+                    class="text-danger"
+                  >
+                    <span *ngIf="sellBookForm.get('price').errors.required">
+                      Price is required.
+                    </span>
+                    <span *ngIf="sellBookForm.get('price').errors.min">
+                      Price must be at least 1.
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="rating">Rating <i class="far fa-star"></i></label>
+                  <input
+                    id="rating"
+                    type="number"
+                    formControlName="rating"
+                    placeholder="Enter rating"
+                    class="form-control"
+                  />
+                  <div
+                    *ngIf="
+                      sellBookForm.get('rating').invalid &&
+                      sellBookForm.get('rating').touched
+                    "
+                    class="text-danger"
+                  >
+                    <span *ngIf="sellBookForm.get('rating').errors.required">
+                      Rating is required.
+                    </span>
+                    <span *ngIf="sellBookForm.get('rating').errors.min">
+                      Rating must be at least 1.
+                    </span>
+                    <span *ngIf="sellBookForm.get('rating').errors.max">
+                      Rating must not exceed 5.
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="form-group">
-              <label for="rating">Rating <i class="far fa-star"></i></label>
-              <input
-                id="rating"
-                type="number"
-                formControlName="rating"
-                placeholder="Enter rating"
-                class="form-control"
-              />
-              <div
-                *ngIf="
-                  sellBookForm.get('rating').invalid &&
-                  sellBookForm.get('rating').touched
-                "
-                class="text-danger"
-              >
-                <span *ngIf="sellBookForm.get('rating').errors.required"
-                  >Rating is required.</span
-                >
-                <span *ngIf="sellBookForm.get('rating').errors.min"
-                  >Rating must be at least 1.</span
-                >
-                <span *ngIf="sellBookForm.get('rating').errors.max"
-                  >Rating must not exceed 5.</span
-                >
-              </div>
-            </div>
-
             <div class="form-group">
               <label for="points"
                 >Points <i class="fas fa-book-open"></i
@@ -196,30 +200,36 @@
                 class="form-control"
               />
             </div>
-            <div class="form-group">
-              <label for="image">Upload Cover Image</label>
-              <input
-                id="bookCoverImage"
-                type="file"
-                formControlName="bookCoverImage"
-                class="form-control"
-                (change)="onImageChange($event)"
-              />
-            </div>
-            <div class="form-group">
-              <label for="file">Upload File</label>
-              <input
-                id="filePath"
-                type="file"
-                formControlName="filePath"
-                class="form-control"
-                (change)="onFileChange($event)"
-              />
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="image">Upload Cover Image</label>
+                  <input
+                    id="bookCoverImage"
+                    type="file"
+                    formControlName="bookCoverImage"
+                    class="form-control"
+                    (change)="onImageChange($event)"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="file">Upload File</label>
+                  <input
+                    id="filePath"
+                    type="file"
+                    formControlName="filePath"
+                    class="form-control"
+                    (change)="onFileChange($event)"
+                  />
+                </div>
+              </div>
             </div>
             <button
               type="submit"
               [disabled]="sellBookForm.invalid"
-              class="btn btn-primary mt-3"
+              class="btn btn-primary mt-3 w-100"
             >
               Submit
             </button>
@@ -228,95 +238,110 @@
       </div>
     </div>
   </div>
-</div>
 
-<div
-  class="modal fade"
-  id="editBookModal"
-  tabindex="-1"
-  aria-labelledby="editBookModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editBookModalLabel">Edit Book</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="editBookForm" (ngSubmit)="updateBook()">
-          <div class="form-group">
-            <label for="title">Book Title</label>
-            <input
-              id="title"
-              type="text"
-              formControlName="title"
-              class="form-control"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="author">Author</label>
-            <input
-              id="author"
-              type="text"
-              formControlName="author"
-              class="form-control"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="category">Category</label>
-            <select
-              id="category"
-              formControlName="category"
-              class="form-control"
-              multiple
-            >
-              <option value="">Select One</option>
-              <option
-                *ngFor="let category of categories"
-                [value]="category._id"
-                [selected]="sellBookForm.value.category?.includes(category._id)"
-              >
-                {{ category.name }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="price">Price</label>
-            <input
-              id="price"
-              type="number"
-              formControlName="price"
-              class="form-control"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="bookCoverImage">Cover Image</label>
-            <input
-              id="bookCoverImage"
-              type="file"
-              class="form-control"
-              (change)="onEditImageChange($event)"
-            />
-          </div>
-
+  <!-- Edit Book Modal -->
+  <div
+    class="modal fade"
+    id="editBookModal"
+    tabindex="-1"
+    aria-labelledby="editBookModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header enhanced-modal-header">
+          <h5 class="modal-title" id="editBookModalLabel">Edit Book</h5>
           <button
-            type="submit"
-            [disabled]="editBookForm.invalid"
-            class="btn btn-primary mt-3"
-          >
-            Save Changes
-          </button>
-        </form>
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="editBookForm" (ngSubmit)="updateBook()">
+            <div class="form-group">
+              <label for="editTitle">Book Title</label>
+              <input
+                id="editTitle"
+                type="text"
+                formControlName="title"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="editAuthor">Author</label>
+              <input
+                id="editAuthor"
+                type="text"
+                formControlName="author"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="editCategory">Category</label>
+              <select
+                id="editCategory"
+                formControlName="category"
+                class="form-select"
+                multiple
+              >
+                <option value="">Select One</option>
+                <option
+                  *ngFor="let category of categories"
+                  [value]="category._id"
+                  [selected]="
+                    sellBookForm.value.category?.includes(category._id)
+                  "
+                >
+                  {{ category.name }}
+                </option>
+              </select>
+            </div>
+            <!-- <div class="form-group">
+              <label for="editCategory">Category</label>
+              <ng-select
+                [items]="categories"
+                bindLabel="name"
+                bindValue="_id"
+                placeholder="Select Categories"
+                [multiple]="true"
+                formControlName="category"
+              >
+              </ng-select>
+            </div> -->
+
+            <div class="form-group">
+              <label for="editPrice">Price</label>
+              <input
+                id="editPrice"
+                type="number"
+                formControlName="price"
+                class="form-control"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="editBookCoverImage">Cover Image</label>
+              <input
+                id="editBookCoverImage"
+                type="file"
+                class="form-control"
+                (change)="onEditImageChange($event)"
+              />
+            </div>
+
+            <button
+              type="submit"
+              [disabled]="editBookForm.invalid"
+              class="btn btn-primary mt-3 w-100"
+            >
+              Save Changes
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

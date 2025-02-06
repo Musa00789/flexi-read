@@ -217,6 +217,17 @@ export class AuthService {
     });
     return this.http.get(`${this.baseUrlUser}/getUserPoints`, { headers });
   }
+  addPoints(points: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.put(
+      `${this.baseUrlUser}/rewardPoints`,
+      { points },
+      { headers }
+    );
+  }
 
   deleteBook(id: String): Observable<any> {
     const token = localStorage.getItem('token');

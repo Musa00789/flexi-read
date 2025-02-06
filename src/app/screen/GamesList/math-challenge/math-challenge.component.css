@@ -1,0 +1,67 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-top: 70px;
+}
+
+.main-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+app-footer {
+  margin-top: auto;
+  color: #fff;
+  text-align: center;
+}
+.math-container {
+  width: 400px;
+  background: white;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  margin: auto;
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+.problem {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.options button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+}
+
+.options button:hover {
+  background-color: #ddd;
+}
+
+.correct {
+  background-color: #4caf50;
+  color: white;
+}
+
+.wrong {
+  background-color: #f44336;
+  color: white;
+}
+
+.message {
+  margin-top: 15px;
+  font-weight: bold;
+}

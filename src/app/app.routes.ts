@@ -9,6 +9,12 @@ import { DashboardComponent } from './screen/dashboard/dashboard.component';
 import { ProfileComponent } from './screen/profile/profile.component';
 import { BuyABookComponent } from './screen/buy-a-book/buy-a-book.component';
 import { TopUpAccountComponent } from './screen/top-up-account/top-up-account.component';
+import { WordScrambleComponent } from './screen/GamesList/word-scramble/word-scramble.component';
+import { GamesComponent } from './screen/games/games.component';
+import { MemoryMatchComponent } from './screen/GamesList/memory-match/memory-match.component';
+import { TriviaQuizComponent } from './screen/GamesList/trivia-quiz/trivia-quiz.component';
+import { MathChallengeComponent } from './screen/GamesList/math-challenge/math-challenge.component';
+import { ComingSoonComponent } from './screen/Extra-Screens/coming-soon/coming-soon.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -34,11 +40,33 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'profile/topup-account',
+    path: 'profile/topup-account/:id',
     component: TopUpAccountComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'games/word-scramble',
+    component: WordScrambleComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'games/memory-match',
+    component: MemoryMatchComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'games/trivia-quiz',
+    component: TriviaQuizComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'games/math-challenge',
+    component: MathChallengeComponent,
+    canActivate: [AuthGuard],
+  },
+  { path: 'games/:id', component: GamesComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
+  { path: 'comming-soon', component: ComingSoonComponent },
   { path: 'signup', component: SignupComponent },
 ];

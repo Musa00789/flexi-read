@@ -14,7 +14,7 @@ import { AuthService } from '../../Services/authService';
     FooterComponent,
     CommonModule,
     FormsModule,
-    RouterLink,
+    // RouterLink,
   ],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.css'],
@@ -39,7 +39,7 @@ export class CategoriesComponent implements OnInit {
       },
       error: (err) => {
         console.error('Token validation failed', err);
-        this.router.navigate(['/login']);
+        // this.router.navigate(['/login']);
       },
     });
 
@@ -112,16 +112,32 @@ export class CategoriesComponent implements OnInit {
       });
     } else {
       // Fetch owned books change it to owned tomorow
-      this.authService.myPurchases().subscribe({
-        next: (response) => {
-          this.allBooks = response.books;
-          this.displayedBooks = [...this.allBooks];
-          this.filteredBooks = [...this.allBooks];
+      this.authService.validateToken().subscribe(
+        () => {
+          this.authService.myPurchases().subscribe({
+            next: (response) => {
+              this.allBooks = response.books;
+              this.displayedBooks = [...this.allBooks];
+              this.filteredBooks = [...this.allBooks];
+            },
+            error: (err) => {
+              console.log('Error fetching owned books: ' + err);
+            },
+          });
         },
-        error: (err) => {
-          console.log('Error fetching owned books: ' + err);
-        },
-      });
+        (error) => {
+          console.log('Validate token failed.' + error);
+          alert('Login to read your books');
+          this.router.navigate(['/Login']);
+        }
+      );
+    }
+  }
+  readBuy(type: boolean, book: any) {
+    if (!type) {
+      this.router.navigate(['/comming-soon']);
+    } else if (type) {
+      this.router.navigate(['/view/buy-a-book', book?._id]);
     }
   }
 

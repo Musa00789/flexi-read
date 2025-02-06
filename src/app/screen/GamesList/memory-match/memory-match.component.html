@@ -1,0 +1,25 @@
+<app-header></app-header>
+<div class="page-container d-flex flex-column min-vh-100">
+  <div class="main-container d-flex flex-grow-1">
+    <div class="memory-match-game">
+      <h1>Memory Match Game</h1>
+      <div class="game-info">
+        <p>{{ message }}</p>
+        <div class="cards">
+          <div
+            *ngFor="let card of cards"
+            class="card"
+            [class.flipped]="card.isFlipped"
+            (click)="flipCard(card)"
+          >
+            <div class="card-front">
+              {{ card.isFlipped ? card.value : "?" }}
+            </div>
+            <div class="card-back">?</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

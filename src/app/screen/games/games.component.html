@@ -1,0 +1,24 @@
+<app-header></app-header>
+
+<div class="page-container d-flex flex-column min-vh-100">
+  <div
+    class="main-container d-flex flex-grow-1 justify-content-center align-items-center"
+  >
+    <div class="game-list-container">
+      <h2 class="text-center mb-4">🎮 Play & Earn Points</h2>
+
+      <div class="game-card-container">
+        <div *ngFor="let game of games" class="game-card">
+          <div class="game-icon">
+            <i [class]="game.icon"></i>
+          </div>
+          <h3>{{ game.name }}</h3>
+          <p>{{ game.description }}</p>
+          <button [routerLink]="game.route" class="play-btn">Play Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

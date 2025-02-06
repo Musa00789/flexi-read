@@ -1,0 +1,21 @@
+<app-header></app-header>
+<div class="page-container d-flex flex-column min-vh-100">
+  <div class="main-container d-flex flex-grow-1">
+    <div class="game-container">
+      <h2>🔠 Word Scramble Game</h2>
+
+      <div class="word-box">
+        <p class="scrambled">{{ scrambledWord }}</p>
+      </div>
+
+      <input [formControl]="userAnswer" placeholder="Enter your answer..." />
+      <button (click)="checkAnswer()">Submit</button>
+
+      <p class="message">{{ message }}</p>
+
+      <p>⏳ Time Left: {{ timer }}s</p>
+      <p>🎯 Points Earned Today: {{ pointsEarned }}/{{ maxPoints }}</p>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

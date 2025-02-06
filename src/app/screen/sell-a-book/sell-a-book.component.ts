@@ -6,6 +6,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { Router } from '@angular/router';
 import { FooterComponent } from '../../Component/Home/footer/footer.component';
@@ -22,6 +23,7 @@ declare var bootstrap: any;
     HeaderComponent,
     CommonModule,
     ReactiveFormsModule,
+    NgSelectModule,
   ],
   templateUrl: './sell-a-book.component.html',
   styleUrl: './sell-a-book.component.css',

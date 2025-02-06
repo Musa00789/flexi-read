@@ -1,0 +1,96 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-top: 70px;
+}
+
+.main-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+app-footer {
+  margin-top: auto;
+  color: #fff;
+  text-align: center;
+}
+.memory-match-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #4caf50;
+  margin-bottom: 20px;
+}
+
+.game-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 150px);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.card {
+  width: 150px;
+  height: 150px;
+  position: relative;
+  background-color: #3498db;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+.card.flipped {
+  background-color: #2ecc71;
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  background-color: #3498db;
+  border-radius: 10px;
+}
+
+.card-back {
+  background-color: #34495e;
+  transform: rotateY(180deg);
+}
+
+.card.flipped .card-back {
+  transform: rotateY(0);
+}
+
+.card.flipped .card-front {
+  transform: rotateY(180deg);
+}
+
+.game-info p {
+  font-size: 18px;
+  color: #2c3e50;
+  font-weight: bold;
+  margin-bottom: 20px;
+}

@@ -69,16 +69,17 @@
           >
         </li>
 
-        <!-- <li class="nav-item">
+        <li class="nav-item">
           <a
-            routerLink="/profile"
+            [routerLink]="['/games', user?._id]"
             *ngIf="isLoggedIn"
             class="nav-link"
             href="#"
             routerLink="/profile"
-            ><i class="far fa-user-circle"></i> Profile</a
           >
-        </li> -->
+            <i class="fas fa-gamepad"></i> Games</a
+          >
+        </li>
       </ul>
       <div class="d-flex align-items-center">
         <button
@@ -90,6 +91,16 @@
         </button>
         <button *ngIf="!isLoggedIn" routerLink="/signup" class="btn btn-light">
           Signup
+        </button>
+        <button
+          *ngIf="isLoggedIn"
+          [routerLink]="['/profile/topup-account', user?._id]"
+          class="btn btn-outline-light"
+          style="margin-right: 8px; border-radius: 30px"
+        >
+          <i class="fas fa-plus"> </i>{{ " " }}
+          <i style="font-size: 17px" class="fas fa-coins"></i>
+          {{ user?.points }}
         </button>
         <button
           *ngIf="isLoggedIn"

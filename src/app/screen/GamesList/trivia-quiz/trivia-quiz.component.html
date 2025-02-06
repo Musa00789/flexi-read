@@ -1,0 +1,34 @@
+<app-header></app-header>
+<div class="page-container d-flex flex-column min-vh-100">
+  <div class="main-container d-flex flex-grow-1">
+    <h4>
+      Select one from the options and earn 10 Book Points per correct question.
+      Ready to play Earn For Learn Game..!
+    </h4>
+    <br />
+    <strong>Lets's Go...!</strong>
+    <div class="quiz-container">
+      <h2>Trivia Quiz</h2>
+      <p class="question">{{ questions[currentQuestionIndex].question }}</p>
+      <div class="options">
+        <button
+          *ngFor="let option of questions[currentQuestionIndex].options"
+          [class.correct]="
+            selectedAnswer === option &&
+            option === questions[currentQuestionIndex].answer
+          "
+          [class.wrong]="
+            selectedAnswer === option &&
+            option !== questions[currentQuestionIndex].answer
+          "
+          (click)="submitAnswer(option)"
+        >
+          {{ option }}
+        </button>
+      </div>
+      <p class="message">{{ message }}</p>
+      <p>Points Earned: {{ points }} / {{ maxPoints }}</p>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>
