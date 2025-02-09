@@ -1,67 +1,108 @@
+* {
+  box-sizing: border-box;
+}
+
 .page-container {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  margin-top: 70px;
+  background: linear-gradient(145deg, #fdfcfb, #e2d1c3);
+  font-family: "Merriweather", serif;
 }
 
 .main-container {
+  flex: 1;
   display: flex;
-  flex-grow: 1;
-}
-
-app-footer {
-  margin-top: auto;
-  color: #fff;
-  text-align: center;
-}
-.quiz-container {
-  width: 400px;
-  background: white;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  margin: auto;
 }
 
-h2 {
-  margin-bottom: 15px;
+.quiz-container {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 30px 40px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.quiz-container h2 {
+  font-size: 2rem;
+  color: #5d4037;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .question {
-  font-size: 18px;
-  margin-bottom: 15px;
+  font-size: 1.3rem;
+  color: #3e2723;
+  margin-bottom: 25px;
+  line-height: 1.4;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .options button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  font-size: 16px;
-  border: none;
+  background: #fffbf2;
+  border: 2px solid #d7ccc8;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 1rem;
+  color: #3e2723;
   cursor: pointer;
-  transition: 0.3s;
-  border-radius: 5px;
-  background-color: #f0f0f0;
+  transition: all 0.3s ease;
 }
 
 .options button:hover {
-  background-color: #ddd;
+  background: #fce9d7;
+  transform: translateY(-2px);
 }
 
-.correct {
-  background-color: #4caf50;
-  color: white;
+.options button.correct {
+  background: #c8e6c9;
+  border-color: #66bb6a;
+  color: #2e7d32;
 }
 
-.wrong {
-  background-color: #f44336;
-  color: white;
+.options button.wrong {
+  background: #ffcdd2;
+  border-color: #ef5350;
+  color: #c62828;
 }
 
 .message {
-  margin-top: 15px;
-  font-weight: bold;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #5d4037;
+  margin-bottom: 10px;
+}
+
+.points {
+  font-size: 1rem;
+  color: #3e2723;
+  font-style: italic;
+}
+
+.quiz-container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

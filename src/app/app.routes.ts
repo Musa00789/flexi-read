@@ -15,6 +15,8 @@ import { MemoryMatchComponent } from './screen/GamesList/memory-match/memory-mat
 import { TriviaQuizComponent } from './screen/GamesList/trivia-quiz/trivia-quiz.component';
 import { MathChallengeComponent } from './screen/GamesList/math-challenge/math-challenge.component';
 import { ComingSoonComponent } from './screen/Extra-Screens/coming-soon/coming-soon.component';
+import { BecomeAWriterComponent } from './screen/Extra-Screens/become-a-writer/become-a-writer.component';
+import { ReadBookComponent } from './screen/read-book/read-book.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -64,9 +66,24 @@ export const routes: Routes = [
     component: MathChallengeComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'books/owned/read/:id',
+    component: ReadBookComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'games/:id', component: GamesComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'comming-soon', component: ComingSoonComponent },
+  {
+    path: 'become-a-writer',
+    component: BecomeAWriterComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'signup', component: SignupComponent },
+  {
+    path: 'bewriter',
+    component: BecomeAWriterComponent,
+    canActivate: [AuthGuard],
+  },
 ];

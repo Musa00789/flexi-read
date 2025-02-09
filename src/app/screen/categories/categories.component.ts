@@ -24,8 +24,8 @@ export class CategoriesComponent implements OnInit {
   allBooks: any[] = [];
   ownedBooks: any[] = [];
   isAllBooksSelected = true;
-  displayedBooks: any[] = []; // Books to be displayed (filtered)
-  types: boolean = true; // Flag to toggle between All Books and Owned Books
+  displayedBooks: any[] = [];
+  types: boolean = true;
   searchQuery: string = '';
   selectedCategories: Set<number> = new Set();
   filteredBooks: any[] = [];
@@ -53,7 +53,6 @@ export class CategoriesComponent implements OnInit {
       },
     });
 
-    // Load books (All books by default)
     this.loadBooks();
   }
 
@@ -99,19 +98,17 @@ export class CategoriesComponent implements OnInit {
 
   loadBooks() {
     if (this.types) {
-      // Fetch all books
       this.authService.loadAllBooks().subscribe({
         next: (response) => {
           this.allBooks = response.books;
-          this.displayedBooks = [...this.allBooks]; // Set to all books
-          this.filteredBooks = [...this.allBooks]; // Set to all books for filtering
+          this.displayedBooks = [...this.allBooks];
+          this.filteredBooks = [...this.allBooks];
         },
         error: (err) => {
           console.log('Error fetching all books: ' + err);
         },
       });
     } else {
-      // Fetch owned books change it to owned tomorow
       this.authService.validateToken().subscribe(
         () => {
           this.authService.myPurchases().subscribe({
@@ -128,26 +125,33 @@ export class CategoriesComponent implements OnInit {
         (error) => {
           console.log('Validate token failed.' + error);
           alert('Login to read your books');
-          this.router.navigate(['/Login']);
+          this.router.navigate(['/login']);
         }
       );
     }
   }
+
   readBuy(type: boolean, book: any) {
+    const bookId = book?.id ? book.id : book?._id;
+    if (!bookId) {
+      console.error('Book ID is undefined', book);
+
+      return;
+    }
+
     if (!type) {
-      this.router.navigate(['/comming-soon']);
-    } else if (type) {
+      this.router.navigate(['/books/owned/read', bookId]);
+    } else {
       this.router.navigate(['/view/buy-a-book', book?._id]);
     }
   }
 
-  // Toggle between "All Books" and "Owned Books"
   toggleTab(tab: string) {
     if (tab === 'all') {
-      this.types = true; // Show All Books
+      this.types = true;
     } else {
-      this.types = false; // Show Owned Books
+      this.types = false;
     }
-    this.loadBooks(); // Load books based on the selected tab
+    this.loadBooks();
   }
 }

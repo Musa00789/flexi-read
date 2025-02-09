@@ -1,0 +1,30 @@
+<app-header></app-header>
+<div class="page-container">
+  <div class="book-reader">
+    <div class="book">
+      <!-- Left Page: apply backward flip animation when previous is clicked -->
+      <div
+        class="page left-page"
+        [ngClass]="{ 'flip-prev': isLeftFlippingPrev }"
+      >
+        <canvas #leftCanvas></canvas>
+      </div>
+      <!-- Right Page: apply forward flip animation when next is clicked -->
+      <div
+        class="page right-page"
+        [ngClass]="{ 'flip-next': isRightFlippingNext }"
+      >
+        <canvas #rightCanvas></canvas>
+      </div>
+    </div>
+    <div class="controls">
+      <button (click)="prevPages()" [disabled]="currentPage === 1">
+        Previous
+      </button>
+      <button (click)="nextPages()" [disabled]="currentPage + 1 >= totalPages">
+        Next
+      </button>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

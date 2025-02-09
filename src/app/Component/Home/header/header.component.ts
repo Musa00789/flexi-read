@@ -24,6 +24,16 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  becomeSeller() {
+    if (this.user.role === 'Reader') {
+      this.router.navigate(['/become-a-writer']);
+    } else if (this.user.role === 'Author') {
+      this.router.navigate(['/view/sell-a-book']);
+    } else {
+      this.router.navigate(['comming-soon']);
+    }
+  }
+
   logout(): void {
     this.authService.logout();
   }

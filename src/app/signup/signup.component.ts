@@ -48,7 +48,7 @@ export class SignupComponent implements OnInit {
             username: formData.username,
             email: formData.email,
             password: formData.password,
-            role: 'Admin',
+            role: 'Reader',
           })
           .subscribe(
             (response) => {

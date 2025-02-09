@@ -1,1 +1,41 @@
-<p>become-a-writer works!</p>
+<app-header></app-header>
+<div class="page-container d-flex flex-column min-vh-100">
+  <div class="main-container d-flex flex-grow-1">
+    <div class="seller-container">
+      <div class="seller-box">
+        <h2>Become a Seller</h2>
+        <p>
+          Sell your books and reach thousands of readers. To continue, please
+          agree to our terms and conditions.
+        </p>
+
+        <div class="terms-box">
+          <input
+            type="checkbox"
+            id="agreeTerms"
+            [(ngModel)]="agreed"
+            (change)="onAgreementChange()"
+          />
+          <label for="agreeTerms">I agree to the Terms & Conditions</label>
+        </div>
+
+        <button
+          class="btn-sell"
+          [disabled]="!agreed"
+          (click)="startTransition()"
+        >
+          Become a Seller
+        </button>
+
+        <!-- Animation Overlay -->
+        <div class="transition-overlay" *ngIf="isTransitioning">
+          <div class="book-animation">
+            <img src="assets/animations/book-flip.gif" alt="Loading" />
+          </div>
+          <p>Setting up your seller account...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

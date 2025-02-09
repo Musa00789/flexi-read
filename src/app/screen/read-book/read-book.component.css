@@ -1,0 +1,105 @@
+/* Overall container with a light parchment-like background */
+.page-container {
+  background: #f5f5dc;
+  height: 92vh;
+  margin-top: 7px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Book reader styling */
+.book-reader {
+  flex: 1;
+  display: flex;
+  margin-top: 30px;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* Book container with 3D perspective for page flip effect */
+.book {
+  position: relative;
+  width: 98%;
+  height: 78vh;
+  display: flex;
+  perspective: 1500px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+/* //////////////////////////////////////// */
+
+.page {
+  width: 50%;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  background: white;
+}
+
+/* Left page: remove right border */
+.left-page {
+  border-right: 0;
+  transform-origin: right; /* For backward flip, flip from right edge */
+}
+
+/* Right page: remove left border */
+.right-page {
+  border-left: 0;
+  transform-origin: left; /* For forward flip, flip from left edge */
+}
+
+/* Flip forward animation for Next (right page flips from 0 to -180deg) */
+.page.right-page.flip-next {
+  animation: flipNext 0.8s ease forwards;
+}
+@keyframes flipNext {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(-180deg);
+  }
+}
+
+/* Flip backward animation for Previous (left page flips from 0 to 180deg) */
+.page.left-page.flip-prev {
+  animation: flipPrev 0.8s ease forwards;
+}
+@keyframes flipPrev {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+
+/* Navigation controls styling */
+.controls {
+  margin-top: 20px;
+}
+
+.controls button {
+  background: #6b4f4f;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.controls button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.controls button:hover:not(:disabled) {
+  background: #8c6a6a;
+}
+
+/* /////////////////////////////////// */
