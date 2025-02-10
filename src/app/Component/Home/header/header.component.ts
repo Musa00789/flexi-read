@@ -16,16 +16,22 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.authService.validateToken().subscribe((response) => {
-      this.isLoggedIn = true;
-      this.authService.getUser(response.user.id).subscribe((resp) => {
-        this.user = resp.user;
-      });
-    });
+    this.authService.validateToken().subscribe(
+      (response) => {
+        this.isLoggedIn = true;
+        this.authService.getUser(response.user.id).subscribe((resp) => {
+          this.user = resp.user;
+        });
+      },
+      (error) => {
+        console.log('Token valition failed.', error);
+        this.router.navigate(['/login']);
+      }
+    );
   }
 
   becomeSeller() {
-    if (this.user.role === 'Reader') {
+    if (this.user.role === 'Reader' || this.user.role === 'Admin') {
       this.router.navigate(['/become-a-writer']);
     } else if (this.user.role === 'Author') {
       this.router.navigate(['/view/sell-a-book']);
