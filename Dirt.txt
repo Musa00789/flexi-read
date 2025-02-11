@@ -20,8 +20,7 @@
           <p class="book-author"><strong>Author:</strong> {{ book?.author }}</p>
           <p class="book-price">
             <strong>Rs: </strong>
-            <span class="price-text">{{ book?.price }}</span
-            ><br />
+            <span class="price-text">{{ book?.price }}</span><br />
             OR<br />
             <i class="fas fa-coins"></i>
             <span class="price-text">: {{ book?.price * 4 }} BP</span>
@@ -34,32 +33,22 @@
           </button>
         </div>
       </div>
-      <div>
-        <h1>Description</h1>
-        <h3>About the Author</h3>
-        <h3>About the Book</h3>
-      </div>
 
       <!-- Review Section -->
       <div class="review-section mt-4">
         <h3>Ratings & Reviews</h3>
         <!-- Existing Reviews List -->
-        <div
-          class="reviews-list"
-          *ngIf="reviews && reviews.length; else noReviews"
-        >
+        <div class="reviews-list" *ngIf="reviews && reviews.length; else noReviews">
           <div class="review" *ngFor="let review of reviews">
             <div class="review-header">
-              <span class="review-user">{{
-                review.userName || "Anonymous"
-              }}</span>
+              <span class="review-user">{{ review.userName || 'Anonymous' }}</span>
               <span class="review-rating">Rating: {{ review.rating }}/5</span>
             </div>
             <div class="review-comment">
               {{ review.comment }}
             </div>
             <div class="review-date">
-              {{ review.createdAt | date : "medium" }}
+              {{ review.createdAt | date:'medium' }}
             </div>
           </div>
         </div>
@@ -71,16 +60,9 @@
         <form #reviewForm="ngForm" (ngSubmit)="submitReview(reviewForm)">
           <div class="form-group">
             <label for="rating">Your Rating (1-5):</label>
-            <select
-              id="rating"
-              name="rating"
-              [(ngModel)]="newReview.rating"
-              required
-            >
+            <select id="rating" name="rating" [(ngModel)]="newReview.rating" required>
               <option value="" disabled selected>Select rating</option>
-              <option *ngFor="let r of [1, 2, 3, 4, 5]" [value]="r">
-                {{ r }}
-              </option>
+              <option *ngFor="let r of [1,2,3,4,5]" [value]="r">{{ r }}</option>
             </select>
           </div>
           <div class="form-group">
@@ -93,20 +75,12 @@
               required
             ></textarea>
           </div>
-          <button
-            type="submit"
-            class="btn btn-success"
-            [disabled]="reviewForm.invalid || submittingReview"
-          >
+          <button type="submit" class="btn btn-success" [disabled]="reviewForm.invalid || submittingReview">
             Submit Review
           </button>
         </form>
-        <div class="message success" *ngIf="reviewSuccessMessage">
-          {{ reviewSuccessMessage }}
-        </div>
-        <div class="message error" *ngIf="reviewErrorMessage">
-          {{ reviewErrorMessage }}
-        </div>
+        <div class="message success" *ngIf="reviewSuccessMessage">{{ reviewSuccessMessage }}</div>
+        <div class="message error" *ngIf="reviewErrorMessage">{{ reviewErrorMessage }}</div>
       </div>
 
       <!-- Suggested Books Section -->
@@ -231,3 +205,118 @@
   </div>
   <app-footer></app-footer>
 </div>
+
+
+
+/////////////////ts//////////////////////////
+
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../Services/authService';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { FooterComponent } from '../../Component/Home/footer/footer.component';
+import { HeaderComponent } from '../../Component/Home/header/header.component';
+
+declare var bootstrap: any;
+
+@Component({
+  selector: 'app-buy-a-book',
+  templateUrl: './buy-a-book.component.html',
+  imports: [CommonModule, FormsModule, FooterComponent, HeaderComponent],
+  styleUrls: ['./buy-a-book.component.css'],
+})
+export class BuyABookComponent implements OnInit {
+  book: any = null;
+  points: number = 0;
+  hasPoints: boolean = false;
+  cardDetails = { cardNumber: '', expiryMonth: '', expiryYear: '', cvv: '' };
+  bookId: string = '';
+  suggestedBooks: any[] = [];
+
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.authService.validateToken().subscribe({
+      next: (response) => {
+        // this.fetchUserData(response.user.id);
+        console.log('Token is valid', response);
+      },
+      error: (err) => {
+        console.error('Token validation failed', err);
+        this.router.navigate(['/login']); // Redirect to login if invalid
+      },
+    });
+    this.bookId = this.route.snapshot.paramMap.get('id') || '';
+    if (this.bookId) this.getBookDetails(this.bookId);
+    this.getUserPoints();
+    this.loadSuggestedBooks();
+  }
+
+  getBookDetails(id: string) {
+    this.authService.getBook(id).subscribe(
+      (data: any) => {
+        this.book = data;
+      },
+      (error) => {
+        console.error('Failed to fetch book details', error);
+      }
+    );
+  }
+
+  getUserPoints() {
+    this.authService.getUserPoints().subscribe(
+      (data: any) => {
+        this.points = data.points;
+        this.hasPoints = this.points >= (this.book?.price || 0);
+      },
+      (error) => {
+        console.error('Failed to fetch user points', error);
+      }
+    );
+  }
+
+  loadSuggestedBooks() {
+    this.authService.loadAllBooks().subscribe(
+      (data: any) => {
+        this.suggestedBooks = data.books;
+      },
+      (error) => {
+        console.error('Failed to fetch suggested books', error);
+      }
+    );
+  }
+
+  openPurchaseModal() {
+    let modal = new bootstrap.Modal(document.getElementById('purchaseModal'));
+    modal.show();
+  }
+
+  usePointsForCheckout() {
+    this.authService.purchaseBook(this.book?._id).subscribe(
+      (response: any) => {
+        alert(`Successfully purchased "${response.book?.title}"!`);
+        this.points = response.remainingPoints;
+        this.hasPoints = this.points >= this.book?.points;
+      },
+      (error) => {
+        alert('Purchase failed: ' + error.error.message);
+      }
+    );
+  }
+
+  proceedWithCardPayment() {
+    console.log('Payment Data:', { ...this.cardDetails, bookId: this.book.id });
+  }
+
+  navigateToBook(bookId: string) {
+    this.router.navigate(['/view/buy-a-book', bookId]);
+  }
+}
+
+/////////////////////////////////////////css////////////////////////////

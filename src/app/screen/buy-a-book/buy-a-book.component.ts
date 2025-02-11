@@ -22,6 +22,16 @@ export class BuyABookComponent implements OnInit {
   cardDetails = { cardNumber: '', expiryMonth: '', expiryYear: '', cvv: '' };
   bookId: string = '';
   suggestedBooks: any[] = [];
+  ////////////////////////
+  reviews: any[] = [];
+  newReview: { rating: number | null; comment: string } = {
+    rating: null,
+    comment: '',
+  };
+  reviewSuccessMessage: string = '';
+  reviewErrorMessage: string = '';
+  submittingReview: boolean = false;
+  /////////////////
 
   constructor(
     private authService: AuthService,
@@ -53,6 +63,7 @@ export class BuyABookComponent implements OnInit {
       },
       (error) => {
         console.error('Failed to fetch book details', error);
+        this.router.navigate(['/error']);
       }
     );
   }
@@ -64,6 +75,7 @@ export class BuyABookComponent implements OnInit {
         this.hasPoints = this.points >= (this.book?.price || 0);
       },
       (error) => {
+        this.router.navigate(['/error']);
         console.error('Failed to fetch user points', error);
       }
     );
@@ -93,6 +105,7 @@ export class BuyABookComponent implements OnInit {
         this.hasPoints = this.points >= this.book?.points;
       },
       (error) => {
+        this.router.navigate(['/error']);
         alert('Purchase failed: ' + error.error.message);
       }
     );
@@ -103,6 +116,37 @@ export class BuyABookComponent implements OnInit {
   }
 
   navigateToBook(bookId: string) {
-    this.router.navigate(['/buy-a-book', bookId]);
+    this.router.navigate(['/view/buy-a-book', bookId]);
+  }
+
+  fetchReviews() {
+    // Example using your BookService or ReviewService:
+    this.authService.getReviews(this.book?._id).subscribe({
+      next: (data: any) => {
+        this.reviews = data;
+      },
+      error: (err) => {
+        console.error('Error fetching reviews:', err);
+        this.router.navigate(['/error']);
+      },
+    });
+  }
+
+  submitReview(form: any) {
+    if (form.invalid) return;
+    this.submittingReview = true;
+    this.authService.addReview(this.book._id, this.newReview).subscribe({
+      next: (response) => {
+        this.reviewSuccessMessage = 'Review added successfully!';
+        this.newReview = { rating: null, comment: '' };
+        this.fetchReviews();
+        this.submittingReview = false;
+      },
+      error: (err) => {
+        this.reviewErrorMessage = err.error?.message || 'Failed to add review.';
+        this.submittingReview = false;
+        this.router.navigate(['/error']);
+      },
+    });
   }
 }

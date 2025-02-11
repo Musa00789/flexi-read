@@ -17,6 +17,7 @@ import { MathChallengeComponent } from './screen/GamesList/math-challenge/math-c
 import { ComingSoonComponent } from './screen/Extra-Screens/coming-soon/coming-soon.component';
 import { BecomeAWriterComponent } from './screen/Extra-Screens/become-a-writer/become-a-writer.component';
 import { ReadBookComponent } from './screen/read-book/read-book.component';
+import { ErrorScreenComponent } from './screen/Extra-Screens/error-screen/error-screen.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -81,6 +82,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   { path: 'signup', component: SignupComponent },
+  { path: 'error', component: ErrorScreenComponent },
   {
     path: 'bewriter',
     component: BecomeAWriterComponent,

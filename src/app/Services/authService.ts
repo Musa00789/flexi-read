@@ -267,4 +267,23 @@ export class AuthService {
     });
     return this.http.get(`${this.baseUrlUser}/getMyOrders`, { headers });
   }
+
+  getReviews(bookId: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get(`/api/reviews/${bookId}`, { headers });
+  }
+
+  addReview(
+    bookId: string,
+    reviewData: { rating: number | null; comment: string }
+  ): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.post(`/api/reviews/${bookId}`, reviewData, { headers });
+  }
 }

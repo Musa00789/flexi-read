@@ -49,6 +49,7 @@ export class CategoriesComponent implements OnInit {
       },
       error: () => {
         this.categories = [];
+        this.router.navigate(['/error']);
         console.error('Failed to fetch categories');
       },
     });
@@ -106,6 +107,7 @@ export class CategoriesComponent implements OnInit {
         },
         error: (err) => {
           console.log('Error fetching all books: ' + err);
+          this.router.navigate(['/error']);
         },
       });
     } else {
@@ -119,6 +121,7 @@ export class CategoriesComponent implements OnInit {
             },
             error: (err) => {
               console.log('Error fetching owned books: ' + err);
+              this.router.navigate(['/error']);
             },
           });
         },

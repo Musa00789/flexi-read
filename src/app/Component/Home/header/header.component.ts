@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
       },
       (error) => {
         console.log('Token valition failed.', error);
-        this.router.navigate(['/login']);
+        // this.router.navigate(['/login']);
       }
     );
   }

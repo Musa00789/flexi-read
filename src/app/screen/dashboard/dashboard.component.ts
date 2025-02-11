@@ -72,6 +72,7 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         console.log('error fetching purchases: ' + err);
+        // this.router.navigate(['/error']);
       },
     });
   }
@@ -93,6 +94,7 @@ export class DashboardComponent implements OnInit {
       },
       (error) => {
         console.error('Error downloading sales report', error);
+        // this.router.navigate(['/error']);
       }
     );
   }

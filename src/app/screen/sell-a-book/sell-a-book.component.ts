@@ -83,6 +83,7 @@ export class SellABookComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to load categories:', err);
+        this.router.navigate(['/error']);
       },
     });
   }
@@ -111,6 +112,7 @@ export class SellABookComponent implements OnInit {
         },
         error: (err) => {
           console.error('Failed to upload book:', err);
+          this.router.navigate(['/error']);
         },
       });
     }
@@ -125,6 +127,7 @@ export class SellABookComponent implements OnInit {
       error: (err) => {
         console.error('Failed to load books:', err);
         this.loadingBooks = false;
+        this.router.navigate(['/error']);
       },
     });
   }
@@ -162,6 +165,7 @@ export class SellABookComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to delete book:', err);
+        this.router.navigate(['/error']);
       },
     });
   }
@@ -189,6 +193,7 @@ export class SellABookComponent implements OnInit {
       });
     } else {
       console.error('Bootstrap modals cannot run during SSR');
+      this.router.navigate(['/error']);
     }
   }
   closeUploadModal() {
@@ -205,6 +210,7 @@ export class SellABookComponent implements OnInit {
       });
     } else {
       console.error('Bootstrap modals cannot run during SSR');
+      this.router.navigate(['/error']);
     }
   }
 
@@ -259,6 +265,7 @@ export class SellABookComponent implements OnInit {
       },
       (error) => {
         console.error('Error updating book:', error);
+        this.router.navigate(['/error']);
       }
     );
   }

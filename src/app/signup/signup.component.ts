@@ -48,7 +48,7 @@ export class SignupComponent implements OnInit {
             username: formData.username,
             email: formData.email,
             password: formData.password,
-            role: 'Reader',
+            role: 'Admin',
           })
           .subscribe(
             (response) => {
@@ -67,7 +67,7 @@ export class SignupComponent implements OnInit {
             username: formData.username,
             email: formData.email,
             password: formData.password,
-            role: 'User',
+            role: 'Reader',
           })
           .subscribe(
             (response) => {

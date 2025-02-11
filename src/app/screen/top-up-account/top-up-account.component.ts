@@ -97,6 +97,7 @@ export class TopUpAccountComponent implements OnInit {
       error: (err) => {
         this.errorMessage = err.error?.message || 'Failed to top up account.';
         this.loading = false;
+        this.router.navigate(['/error']);
       },
     });
   }

@@ -69,7 +69,10 @@ export class ReadBookComponent implements OnInit {
           this.loadPdf();
         }
       },
-      (error) => console.error('Failed to fetch book details', error)
+      (error) => {
+        console.error('Failed to fetch book details', error);
+        this.router.navigate(['/error']);
+      }
     );
   }
 

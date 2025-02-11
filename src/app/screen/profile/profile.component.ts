@@ -52,6 +52,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.log('error fetching books: ' + err);
+        this.router.navigate(['/error']);
       },
     });
 
@@ -66,6 +67,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.log('error fetching orders: ' + err);
+        this.router.navigate(['/error']);
       },
     });
   }
@@ -77,6 +79,7 @@ export class ProfileComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching user data', error);
+        this.router.navigate(['/error']);
       }
     );
   }
