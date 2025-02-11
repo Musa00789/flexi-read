@@ -91,10 +91,10 @@ export class MemoryMatchComponent implements OnInit {
   awardPoints(pointsToAward: number) {
     this.authService.getUserPoints().subscribe((currentPoints) => {
       const remaining = this.maxPoints - currentPoints;
-      if (remaining <= 0) {
-        this.message = '⚠️ Daily limit reached';
-        return;
-      }
+      // if (remaining <= 0) {
+      //   this.message = '⚠️ Daily limit reached';
+      //   return;
+      // }
 
       const finalAward = Math.min(pointsToAward, remaining);
       this.authService.addPoints(finalAward).subscribe(

@@ -88,11 +88,11 @@ export class TriviaQuizComponent implements OnInit {
         console.log('Current Points:', currentPoints); // Debug log
         console.log('Points to Award:', pointsToAward); // Debug log
         const remaining = this.DAILY_POINT_LIMIT - currentPoints;
-        if (remaining <= 0) {
-          observer.next({ awarded: 0, message: '⚠️ Daily limit reached' });
-          observer.complete();
-          return;
-        }
+        // if (remaining <= 0) {
+        //   observer.next({ awarded: 0, message: '⚠️ Daily limit reached' });
+        //   observer.complete();
+        //   return;
+        // }
 
         const finalAward = Math.min(pointsToAward, remaining);
         const newPoints = currentPoints + finalAward;

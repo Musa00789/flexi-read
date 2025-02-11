@@ -11,7 +11,7 @@ import { FooterComponent } from '../../../Component/Home/footer/footer.component
 export class ComingSoonComponent implements OnInit {
   launchDate: Date = new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000); // 10 days from now
   isPlaying = false;
-  audio = new Audio('assets/background-music.mp3');
+  audio = new Audio('music.mp3');
 
   constructor() {}
 

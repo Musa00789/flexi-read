@@ -1,4 +1,3 @@
-/* Overall container with a light parchment-like background */
 .page-container {
   background: #f5f5dc;
   height: 92vh;
@@ -7,7 +6,6 @@
   flex-direction: column;
 }
 
-/* Book reader styling */
 .book-reader {
   flex: 1;
   display: flex;
@@ -17,7 +15,6 @@
   padding: 40px 20px;
 }
 
-/* Book container with 3D perspective for page flip effect */
 .book {
   position: relative;
   width: 98%;
@@ -27,7 +24,6 @@
   background: #fff;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
-/* //////////////////////////////////////// */
 
 .page {
   width: 50%;
@@ -38,19 +34,16 @@
   background: white;
 }
 
-/* Left page: remove right border */
 .left-page {
   border-right: 0;
-  transform-origin: right; /* For backward flip, flip from right edge */
+  transform-origin: right;
 }
 
-/* Right page: remove left border */
 .right-page {
   border-left: 0;
-  transform-origin: left; /* For forward flip, flip from left edge */
+  transform-origin: left;
 }
 
-/* Flip forward animation for Next (right page flips from 0 to -180deg) */
 .page.right-page.flip-next {
   animation: flipNext 0.8s ease forwards;
 }
@@ -63,7 +56,6 @@
   }
 }
 
-/* Flip backward animation for Previous (left page flips from 0 to 180deg) */
 .page.left-page.flip-prev {
   animation: flipPrev 0.8s ease forwards;
 }
@@ -76,7 +68,6 @@
   }
 }
 
-/* Navigation controls styling */
 .controls {
   margin-top: 20px;
 }
@@ -101,5 +92,3 @@
 .controls button:hover:not(:disabled) {
   background: #8c6a6a;
 }
-
-/* /////////////////////////////////// */

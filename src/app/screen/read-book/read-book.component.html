@@ -3,12 +3,14 @@
   <div class="book-reader">
     <div class="book">
       <div
+        (click)="prevPages()"
         class="page left-page"
         [ngClass]="{ 'flip-prev': isLeftFlippingPrev }"
       >
         <canvas #leftCanvas></canvas>
       </div>
       <div
+        (click)="nextPages()"
         class="page right-page"
         [ngClass]="{ 'flip-next': isRightFlippingNext }"
       >
