@@ -74,6 +74,7 @@
             <select
               id="rating"
               name="rating"
+              class="form-control"
               [(ngModel)]="newReview.rating"
               required
             >
@@ -86,6 +87,7 @@
           <div class="form-group">
             <label for="comment">Your Review:</label>
             <textarea
+              class="form-control"
               id="comment"
               name="comment"
               [(ngModel)]="newReview.comment"
@@ -101,6 +103,7 @@
             Submit Review
           </button>
         </form>
+        <!-- ///////////////////////////////////////////// -->
         <div class="message success" *ngIf="reviewSuccessMessage">
           {{ reviewSuccessMessage }}
         </div>
@@ -173,55 +176,12 @@
               </div>
 
               <div class="tab-pane fade" id="topUp">
-                <form (ngSubmit)="proceedWithCardPayment()">
-                  <div class="form-group">
-                    <label for="cardNumber">Card Number</label>
-                    <input
-                      type="text"
-                      id="cardNumber"
-                      class="form-control"
-                      [(ngModel)]="cardDetails.cardNumber"
-                      name="cardNumber"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="expiryMonth">Expiry Month</label>
-                    <input
-                      type="number"
-                      id="expiryMonth"
-                      class="form-control"
-                      [(ngModel)]="cardDetails.expiryMonth"
-                      name="expiryMonth"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="expiryYear">Expiry Year</label>
-                    <input
-                      type="number"
-                      id="expiryYear"
-                      class="form-control"
-                      [(ngModel)]="cardDetails.expiryYear"
-                      name="expiryYear"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label for="cvv">CVV</label>
-                    <input
-                      type="number"
-                      id="cvv"
-                      class="form-control"
-                      [(ngModel)]="cardDetails.cvv"
-                      name="cvv"
-                      required
-                    />
-                  </div>
-                  <button type="submit" class="btn btn-primary mt-3">
-                    Proceed with Payment
-                  </button>
-                </form>
+                <button
+                  class="btn btn-success"
+                  [routerLink]="['/profile/topup-account/', uId]"
+                >
+                  Add Funds <i class="fas fa-coins"></i>
+                </button>
               </div>
             </div>
           </div>

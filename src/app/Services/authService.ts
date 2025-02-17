@@ -273,7 +273,7 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this.http.get(`/api/reviews/${bookId}`, { headers });
+    return this.http.get(`/addReview/${bookId}`, { headers });
   }
 
   addReview(
@@ -284,6 +284,6 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this.http.post(`/api/reviews/${bookId}`, reviewData, { headers });
+    return this.http.post(`/getReviews/${bookId}`, reviewData, { headers });
   }
 }

@@ -4,15 +4,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../Services/authService';
+import { LoaderComponent } from '../screen/Extra-Screens/loader/loader.component';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, LoaderComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | any;
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -34,11 +36,13 @@ export class LoginComponent implements OnInit {
       if (formData.email === 'mmusadar@gmail.com') {
         this.authService.loginAdmin(formData).subscribe(
           (response) => {
+            this.loading = true;
             console.log('Login successful', response);
             localStorage.setItem('token', response.token);
             this.router.navigate(['/home']);
           },
           (error) => {
+            this.loading = false;
             console.error('Login failed', error);
             alert(error.error.message);
           }
@@ -46,6 +50,7 @@ export class LoginComponent implements OnInit {
       } else {
         this.authService.login(formData).subscribe(
           (response) => {
+            this.loading = true;
             console.log('Login successful', response);
             localStorage.setItem('token', response.token);
             // const token = localStorage.getItem('token');
@@ -53,6 +58,7 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['/home']);
           },
           (error) => {
+            this.loading = false;
             console.error('Login failed', error);
             alert(error.error.message);
           }

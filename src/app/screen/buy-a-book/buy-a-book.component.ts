@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../Services/authService';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,12 +12,19 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-buy-a-book',
   templateUrl: './buy-a-book.component.html',
-  imports: [CommonModule, FormsModule, FooterComponent, HeaderComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    FooterComponent,
+    RouterLink,
+    HeaderComponent,
+  ],
   styleUrls: ['./buy-a-book.component.css'],
 })
 export class BuyABookComponent implements OnInit {
   book: any = null;
   points: number = 0;
+  uId: any;
   hasPoints: boolean = false;
   cardDetails = { cardNumber: '', expiryMonth: '', expiryYear: '', cvv: '' };
   bookId: string = '';
@@ -42,6 +49,7 @@ export class BuyABookComponent implements OnInit {
   ngOnInit() {
     this.authService.validateToken().subscribe({
       next: (response) => {
+        this.uId = response.user.id;
         // this.fetchUserData(response.user.id);
         console.log('Token is valid', response);
       },
@@ -105,8 +113,8 @@ export class BuyABookComponent implements OnInit {
         this.hasPoints = this.points >= this.book?.points;
       },
       (error) => {
-        this.router.navigate(['/error']);
         alert('Purchase failed: ' + error.error.message);
+        this.router.navigate(['/error']);
       }
     );
   }
