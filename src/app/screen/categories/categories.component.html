@@ -52,6 +52,20 @@
       </div>
       <!-- Books Section -->
       <div class="row g-4 books-container">
+        <p
+          style="
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            font-size: 25px;
+            font-weight: 500;
+            margin-top: 35vh;
+          "
+          *ngIf="filteredBooks.length === 0"
+        >
+          No Books available :(<br />
+          Buy Some.
+        </p>
         <div class="col-md-2" *ngFor="let book of filteredBooks">
           <div class="card h-100">
             <img

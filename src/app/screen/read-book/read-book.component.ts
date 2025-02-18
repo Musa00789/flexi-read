@@ -71,7 +71,7 @@ export class ReadBookComponent implements OnInit {
       },
       (error) => {
         console.error('Failed to fetch book details', error);
-        this.router.navigate(['/error']);
+        // this.router.navigate(['/error']);
       }
     );
   }

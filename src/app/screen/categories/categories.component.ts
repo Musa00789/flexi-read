@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { HeaderComponent } from '../../Component/Home/header/header.component';
 import { FooterComponent } from '../../Component/Home/footer/footer.component';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../Services/authService';
 
 @Component({
@@ -29,10 +29,16 @@ export class CategoriesComponent implements OnInit {
   searchQuery: string = '';
   selectedCategories: Set<number> = new Set();
   filteredBooks: any[] = [];
+  categoryName: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
+    this.categoryName = this.route.snapshot.paramMap.get('name') || '';
     this.authService.validateToken().subscribe({
       next: (response) => {
         console.log('Token is valid', response);
@@ -42,19 +48,39 @@ export class CategoriesComponent implements OnInit {
         // this.router.navigate(['/login']);
       },
     });
-
+    this.loadBooks();
+    console.log('this is the category name', this.categoryName);
     this.authService.getCategories().subscribe({
       next: (response) => {
         this.categories = response;
       },
       error: () => {
-        this.categories = [];
-        this.router.navigate(['/error']);
         console.error('Failed to fetch categories');
+        // this.router.navigate(['/error']);
       },
     });
+    this.preselectCategory();
+  }
 
-    this.loadBooks();
+  preselectCategory() {
+    if (!this.categoryName || this.categoryName.toLowerCase() === 'all') return;
+
+    const matchingCategory = this.categories.find((cat) => {
+      cat.name.toLowerCase() === this.categoryName.toLowerCase();
+      console.log('Matching category:', cat);
+    });
+
+    if (matchingCategory) {
+      this.selectedCategories.add(matchingCategory._id);
+      console.log(
+        'Preselected category:',
+        matchingCategory,
+        '+',
+        this.selectedCategories
+      );
+    }
+
+    this.filterBooks();
   }
 
   toggleCategory(categoryId: any, event: Event) {
@@ -104,10 +130,17 @@ export class CategoriesComponent implements OnInit {
           this.allBooks = response.books;
           this.displayedBooks = [...this.allBooks];
           this.filteredBooks = [...this.allBooks];
+          if (this.selectedCategories.size > 0) {
+            this.filterBooks();
+          }
         },
         error: (err) => {
+          this.allBooks = [];
+          this.displayedBooks = [];
+          this.filteredBooks = [];
           console.log('Error fetching all books: ' + err);
-          this.router.navigate(['/error']);
+          alert('Error fetching all books');
+          // this.router.navigate(['/error']);
         },
       });
     } else {
@@ -120,8 +153,11 @@ export class CategoriesComponent implements OnInit {
               this.filteredBooks = [...this.allBooks];
             },
             error: (err) => {
+              this.allBooks = [];
+              this.displayedBooks = [];
+              this.filteredBooks = [];
               console.log('Error fetching owned books: ' + err);
-              this.router.navigate(['/error']);
+              // this.router.navigate(['/error']);
             },
           });
         },

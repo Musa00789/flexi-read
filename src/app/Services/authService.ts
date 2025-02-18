@@ -125,6 +125,20 @@ export class AuthService {
     );
   }
 
+  updateProfile(id: string, updateData: FormData): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.put<any>(
+      `${this.baseUrlUser}/updateProfile`,
+      { updateData },
+      {
+        headers,
+      }
+    );
+  }
+
   getDashboardData(): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
@@ -273,7 +287,7 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this.http.get(`/addReview/${bookId}`, { headers });
+    return this.http.get(`${this.baseUrlUser}/getReviews/${bookId}`);
   }
 
   addReview(
@@ -284,6 +298,10 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this.http.post(`/getReviews/${bookId}`, reviewData, { headers });
+    return this.http.post(
+      `${this.baseUrlUser}/addReview/${bookId}`,
+      { reviewData },
+      { headers }
+    );
   }
 }

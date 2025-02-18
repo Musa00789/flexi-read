@@ -83,7 +83,7 @@ export class BuyABookComponent implements OnInit {
         this.hasPoints = this.points >= (this.book?.price || 0);
       },
       (error) => {
-        this.router.navigate(['/error']);
+        // this.router.navigate(['/error']);
         console.error('Failed to fetch user points', error);
       }
     );
@@ -114,7 +114,7 @@ export class BuyABookComponent implements OnInit {
       },
       (error) => {
         alert('Purchase failed: ' + error.error.message);
-        this.router.navigate(['/error']);
+        // this.router.navigate(['/error']);
       }
     );
   }
@@ -135,7 +135,7 @@ export class BuyABookComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error fetching reviews:', err);
-        this.router.navigate(['/error']);
+        // this.router.navigate(['/error']);
       },
     });
   }
@@ -153,7 +153,7 @@ export class BuyABookComponent implements OnInit {
       error: (err) => {
         this.reviewErrorMessage = err.error?.message || 'Failed to add review.';
         this.submittingReview = false;
-        this.router.navigate(['/error']);
+        // this.router.navigate(['/error']);
       },
     });
   }

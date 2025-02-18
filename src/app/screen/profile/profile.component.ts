@@ -1,6 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NgModule } from '@angular/core';
-// import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../Component/Home/header/header.component';
@@ -8,6 +6,9 @@ import { FooterComponent } from '../../Component/Home/footer/footer.component';
 import { AuthService } from '../../Services/authService';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-profile',
   imports: [
@@ -18,16 +19,18 @@ import { HttpClient } from '@angular/common/http';
     RouterLink,
   ],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css',
+  styleUrls: ['./profile.component.css'], // Fixed: styleUrls (plural)
 })
 export class ProfileComponent implements OnInit {
   user: any;
+  editUser: any = { username: '', password: '', confirmPassword: '' };
   orders: any;
   pointsToAdd: number = 0;
   showEditIcon = false;
   books: any[] = [];
 
   @ViewChild('fileInput') fileInput!: ElementRef;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -45,6 +48,7 @@ export class ProfileComponent implements OnInit {
         this.router.navigate(['/login']); // Redirect to login if invalid
       },
     });
+
     this.authService.loadMyBooks().subscribe({
       next: (response) => {
         this.books = response;
@@ -52,7 +56,6 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.log('error fetching books: ' + err);
-        this.router.navigate(['/error']);
       },
     });
 
@@ -63,11 +66,10 @@ export class ProfileComponent implements OnInit {
     this.authService.myPurchases().subscribe({
       next: (response) => {
         this.orders = response.books;
-        console.log('Orders loaded.' + this.orders);
+        console.log('Orders loaded.', this.orders);
       },
       error: (err) => {
         console.log('error fetching orders: ' + err);
-        this.router.navigate(['/error']);
       },
     });
   }
@@ -79,7 +81,6 @@ export class ProfileComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching user data', error);
-        this.router.navigate(['/error']);
       }
     );
   }
@@ -92,6 +93,7 @@ export class ProfileComponent implements OnInit {
   uploadProfilePicture() {
     this.fileInput.nativeElement.click();
   }
+
   getStars(rating: number): number[] {
     return Array(rating).fill(0);
   }
@@ -116,5 +118,44 @@ export class ProfileComponent implements OnInit {
   viewOrder(orderId: string) {
     console.log(`Navigating to order ID: ${orderId}`);
     // Implement navigation logic (e.g., this.router.navigate([`/order/${orderId}`]))
+  }
+
+  openEditModal() {
+    const modal = new bootstrap.Modal(
+      document.getElementById('editProfileModal')
+    );
+    modal.show();
+  }
+
+  // Handle profile update using a single API call
+  updateProfile() {
+    if (
+      this.editUser.password &&
+      this.editUser.password !== this.editUser.confirmPassword
+    ) {
+      alert('Passwords do not match!');
+      return;
+    }
+
+    // Prepare update data; email is omitted because email updates are not allowed here.
+    const updateData: any = { username: this.editUser.username };
+    if (this.editUser.password) {
+      updateData.password = this.editUser.password;
+    }
+
+    // Call the single API endpoint without passing the user id (the token provides it)
+    this.authService.updateProfile(this.user._id, updateData).subscribe({
+      next: () => {
+        alert('Profile updated successfully!');
+        this.fetchUserData(this.user._id);
+        // Optionally reset the editUser object here:
+        this.editUser = { username: '', password: '', confirmPassword: '' };
+        // And close the modal:
+        const modalEl = document.getElementById('editProfileModal');
+        const modalInstance = bootstrap.Modal.getInstance(modalEl);
+        modalInstance.hide();
+      },
+      error: (err) => console.error('Error updating profile:', err),
+    });
   }
 }

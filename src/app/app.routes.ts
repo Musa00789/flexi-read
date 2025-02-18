@@ -28,7 +28,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'categories',
+    path: 'categories/:name',
     component: CategoriesComponent,
     // canActivate: [AuthGuard],
   },
