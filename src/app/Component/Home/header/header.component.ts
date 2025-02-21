@@ -41,6 +41,7 @@ export class HeaderComponent implements OnInit {
   }
 
   becomeSeller() {
+    this.loading = true;
     if (this.user.role === 'Reader' || this.user.role === 'Admin') {
       this.router.navigate(['/become-a-writer']);
     } else if (this.user.role === 'Author') {

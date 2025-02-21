@@ -138,6 +138,17 @@ export class AuthService {
       }
     );
   }
+  changeRole(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.put<any>(
+      `${this.baseUrlUser}/changeRole`,
+      {},
+      { headers }
+    );
+  }
 
   getDashboardData(): Observable<any> {
     const token = localStorage.getItem('token');

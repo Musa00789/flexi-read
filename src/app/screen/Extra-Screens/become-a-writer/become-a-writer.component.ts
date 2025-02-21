@@ -46,7 +46,14 @@ export class BecomeAWriterComponent implements OnInit {
   startTransition() {
     this.isTransitioning = true;
     this.user.role = 'Author';
-    // this.authService.updateUser(this.user)
+    this.authService.changeRole().subscribe(
+      (response) => {
+        this.router.navigate(['/become-a-writer']);
+      },
+      (error) => {
+        console.log('Error changing role', error);
+      }
+    );
     setTimeout(() => {
       this.router.navigate(['/view/sell-a-book']);
     }, 3000);
