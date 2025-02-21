@@ -6,6 +6,7 @@ import { FooterComponent } from '../../Component/Home/footer/footer.component';
 import { AuthService } from '../../Services/authService';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { LoaderComponent } from '../Extra-Screens/loader/loader.component';
 
 declare var bootstrap: any;
 
@@ -17,9 +18,10 @@ declare var bootstrap: any;
     FormsModule,
     CommonModule,
     RouterLink,
+    LoaderComponent,
   ],
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'], // Fixed: styleUrls (plural)
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
   user: any;
@@ -28,6 +30,7 @@ export class ProfileComponent implements OnInit {
   pointsToAdd: number = 0;
   showEditIcon = false;
   books: any[] = [];
+  loading: boolean = false;
 
   @ViewChild('fileInput') fileInput!: ElementRef;
 
@@ -42,20 +45,22 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         this.fetchUserData(response.user.id);
         console.log('Token is valid', response);
+        this.loading = true;
       },
       error: (err) => {
         console.error('Token validation failed', err);
-        this.router.navigate(['/login']); // Redirect to login if invalid
+        this.router.navigate(['/login']);
       },
     });
-
     this.authService.loadMyBooks().subscribe({
       next: (response) => {
         this.books = response;
         console.log('Books loaded.');
+        this.loading = false;
       },
       error: (err) => {
         console.log('error fetching books: ' + err);
+        this.loading = false;
       },
     });
 
@@ -63,23 +68,30 @@ export class ProfileComponent implements OnInit {
   }
 
   getMyOrders() {
+    this.loading = true;
     this.authService.myPurchases().subscribe({
       next: (response) => {
         this.orders = response.books;
         console.log('Orders loaded.', this.orders);
+        this.loading = false;
       },
       error: (err) => {
         console.log('error fetching orders: ' + err);
+        this.loading = false;
       },
     });
   }
 
   fetchUserData(id: any) {
+    this.loading = true;
     this.authService.getUser(id).subscribe(
       (response) => {
         this.user = response.user;
+        console.log('User data fetched', this.user);
+        this.loading = false;
       },
       (error) => {
+        this.loading = false;
         console.error('Error fetching user data', error);
       }
     );
@@ -87,7 +99,6 @@ export class ProfileComponent implements OnInit {
 
   viewBook(bookId: number) {
     console.log(`Navigating to book ID: ${bookId}`);
-    // Implement navigation logic (e.g., this.router.navigate([`/book/${bookId}`]))
   }
 
   uploadProfilePicture() {
@@ -103,12 +114,15 @@ export class ProfileComponent implements OnInit {
     if (file) {
       const formData = new FormData();
       formData.append('profilePicture', file);
-
+      this.loading = true;
       this.authService.uploadProfile(this.user?._id, formData).subscribe(
         (response) => {
           this.fetchUserData(this.user?._id);
+          console.log('Profile picture uploaded', response);
+          this.loading = false;
         },
         (error) => {
+          this.loading = false;
           console.error('Error uploading profile picture', error);
         }
       );
@@ -117,7 +131,6 @@ export class ProfileComponent implements OnInit {
 
   viewOrder(orderId: string) {
     console.log(`Navigating to order ID: ${orderId}`);
-    // Implement navigation logic (e.g., this.router.navigate([`/order/${orderId}`]))
   }
 
   openEditModal() {
@@ -127,7 +140,6 @@ export class ProfileComponent implements OnInit {
     modal.show();
   }
 
-  // Handle profile update using a single API call
   updateProfile() {
     if (
       this.editUser.password &&
@@ -137,20 +149,16 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    // Prepare update data; email is omitted because email updates are not allowed here.
     const updateData: any = { username: this.editUser.username };
     if (this.editUser.password) {
       updateData.password = this.editUser.password;
     }
 
-    // Call the single API endpoint without passing the user id (the token provides it)
     this.authService.updateProfile(this.user._id, updateData).subscribe({
       next: () => {
         alert('Profile updated successfully!');
         this.fetchUserData(this.user._id);
-        // Optionally reset the editUser object here:
         this.editUser = { username: '', password: '', confirmPassword: '' };
-        // And close the modal:
         const modalEl = document.getElementById('editProfileModal');
         const modalInstance = bootstrap.Modal.getInstance(modalEl);
         modalInstance.hide();

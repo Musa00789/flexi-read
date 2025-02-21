@@ -8,6 +8,7 @@ import { FooterComponent } from '../../Component/Home/footer/footer.component';
 
 // Import from the legacy build (v4)
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/legacy/build/pdf';
+import { LoaderComponent } from '../Extra-Screens/loader/loader.component';
 
 // IMPORTANT: Set the workerSrc to your public URL.
 // Since Angular 19 uses a public folder instead of assets, ensure you've placed
@@ -17,7 +18,13 @@ GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 @Component({
   selector: 'app-read-book',
-  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    HeaderComponent,
+    FooterComponent,
+    LoaderComponent,
+  ],
   templateUrl: './read-book.component.html',
   styleUrls: ['./read-book.component.css'],
 })
@@ -26,11 +33,12 @@ export class ReadBookComponent implements OnInit {
   book: any = null;
   pdfLink: string = '';
   pdfDoc: any = null;
-  currentPage: number = 1; // Left page number (pages displayed in pairs)
+  currentPage: number = 1;
   totalPages: number = 0;
   isFlipping: boolean = false;
   isRightFlippingNext: boolean = false;
   isLeftFlippingPrev: boolean = false;
+  loading: boolean = false;
 
   @ViewChild('leftCanvas', { static: false })
   leftCanvasRef!: ElementRef<HTMLCanvasElement>;
@@ -44,7 +52,6 @@ export class ReadBookComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Validate token
     this.authService.validateToken().subscribe({
       next: (response) => console.log('Token is valid', response),
       error: (err) => {
@@ -52,8 +59,7 @@ export class ReadBookComponent implements OnInit {
         this.router.navigate(['/login']);
       },
     });
-
-    // Get book id from the route
+    this.loading = true;
     this.bookId = this.route.snapshot.paramMap.get('id') || '';
     if (this.bookId) {
       this.getBookDetails(this.bookId);
@@ -61,15 +67,18 @@ export class ReadBookComponent implements OnInit {
   }
 
   getBookDetails(id: string) {
+    this.loading = true;
     this.authService.getBook(id).subscribe(
       (data: any) => {
         this.book = data;
         if (this.book && this.book.pdfLink) {
           this.pdfLink = this.book.pdfLink;
           this.loadPdf();
+          this.loading = false;
         }
       },
       (error) => {
+        this.loading = false;
         console.error('Failed to fetch book details', error);
         // this.router.navigate(['/error']);
       }
@@ -88,9 +97,7 @@ export class ReadBookComponent implements OnInit {
   }
 
   async renderCurrentPages() {
-    // Render left page (currentPage)
     await this.renderPage(this.currentPage, this.leftCanvasRef);
-    // Render right page (currentPage + 1) if available
     if (this.currentPage + 1 <= this.totalPages) {
       await this.renderPage(this.currentPage + 1, this.rightCanvasRef);
     } else if (this.rightCanvasRef) {
@@ -121,44 +128,17 @@ export class ReadBookComponent implements OnInit {
     await page.render(renderContext).promise;
   }
 
-  // nextPages() {
-  //   if (this.currentPage + 1 < this.totalPages) {
-  //     this.isRightFlippingNext = true;
-  //     setTimeout(() => {
-  //       // When flipping next, the right page becomes the new left page.
-  //       this.currentPage += 1;
-  //       this.renderCurrentPages();
-  //       this.isRightFlippingNext = false;
-  //     }, 800); // Duration matches CSS animation duration
-  //   }
-  // }
-
-  // // For Previous: animate the left page flipping (backward) and then update currentPage.
-  // prevPages() {
-  //   if (this.currentPage > 1) {
-  //     this.isLeftFlippingPrev = true;
-  //     setTimeout(() => {
-  //       // When flipping previous, the left page becomes the new right page.
-  //       this.currentPage -= 1;
-  //       this.renderCurrentPages();
-  //       this.isLeftFlippingPrev = false;
-  //     }, 800);
-  //   }
-  // }
-
   nextPages() {
     if (this.currentPage + 1 < this.totalPages) {
       this.isRightFlippingNext = true;
       setTimeout(() => {
-        // After the flip, update the current page pointer.
         this.currentPage += 1;
         this.renderCurrentPages();
         this.isRightFlippingNext = false;
-      }, 800); // Duration should match the animation duration.
+      }, 800);
     }
   }
 
-  // For Previous: animate the left page with advanced flip and then update currentPage.
   prevPages() {
     if (this.currentPage > 1) {
       this.isLeftFlippingPrev = true;

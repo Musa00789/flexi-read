@@ -5,10 +5,17 @@ import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../Services/authService';
 import { saveAs } from 'file-saver';
+import { LoaderComponent } from '../Extra-Screens/loader/loader.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [HeaderComponent, FooterComponent, CommonModule, RouterLink],
+  imports: [
+    HeaderComponent,
+    FooterComponent,
+    CommonModule,
+    RouterLink,
+    LoaderComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -25,6 +32,7 @@ export class DashboardComponent implements OnInit {
   page: number = 1;
   limit: number = 10;
   loading: boolean = false;
+  loader: boolean = false;
   hasMoreBooks: boolean = true;
 
   ngOnInit() {
@@ -41,10 +49,12 @@ export class DashboardComponent implements OnInit {
         this.router.navigate(['/login']);
       },
     });
+    this.loader = true;
     this.authService.loadMyBooks().subscribe({
       next: (response) => {
         this.books = response;
         console.log('Books loaded.');
+        // this.loader = false;
       },
       error: (err) => {
         console.log('error fetching books: ' + err);
@@ -69,8 +79,10 @@ export class DashboardComponent implements OnInit {
       next: (response) => {
         console.log('Purchases loaded.', response);
         this.myBooks = response.books;
+        this.loader = false;
       },
       error: (err) => {
+        this.loader = false;
         console.log('error fetching purchases: ' + err);
         // this.router.navigate(['/error']);
       },
@@ -88,11 +100,14 @@ export class DashboardComponent implements OnInit {
   }
 
   downloadSalesReport() {
+    this.loader = true;
     this.authService.generateSaleReport().subscribe(
       (pdfData: Blob) => {
         saveAs(pdfData, 'sales-report.pdf');
+        this.loader = false;
       },
       (error) => {
+        this.loader = false;
         console.error('Error downloading sales report', error);
         // this.router.navigate(['/error']);
       }

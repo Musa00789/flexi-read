@@ -32,11 +32,11 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.loading = true;
       const formData = this.loginForm.value;
       if (formData.email === 'mmusadar@gmail.com') {
         this.authService.loginAdmin(formData).subscribe(
           (response) => {
-            this.loading = true;
             console.log('Login successful', response);
             localStorage.setItem('token', response.token);
             this.router.navigate(['/home']);

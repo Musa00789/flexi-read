@@ -13,6 +13,7 @@ import { FooterComponent } from '../../Component/Home/footer/footer.component';
 import { HeaderComponent } from '../../Component/Home/header/header.component';
 import { AuthService } from '../../Services/authService';
 import { HttpClient } from '@angular/common/http';
+import { LoaderComponent } from '../Extra-Screens/loader/loader.component';
 // import * as bootstrap from 'bootstrap';
 
 declare var bootstrap: any;
@@ -24,6 +25,7 @@ declare var bootstrap: any;
     CommonModule,
     ReactiveFormsModule,
     NgSelectModule,
+    LoaderComponent,
   ],
   templateUrl: './sell-a-book.component.html',
   styleUrl: './sell-a-book.component.css',
@@ -38,6 +40,7 @@ export class SellABookComponent implements OnInit {
   selectedBookId: string | null = null;
   selectedBookImage: File | null = null;
   selectedCategories: any;
+  loading: boolean = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
@@ -76,12 +79,15 @@ export class SellABookComponent implements OnInit {
         this.router.navigate(['/login']);
       },
     });
+    this.loading = true;
     this.loadBooks();
     this.authService.getCategories().subscribe({
       next: (response) => {
         this.categories = response;
+        this.loading = false;
       },
       error: (err) => {
+        this.loading = false;
         console.error('Failed to load categories:', err);
         // this.router.navigate(['/error']);
       },
@@ -120,12 +126,15 @@ export class SellABookComponent implements OnInit {
   }
 
   loadBooks() {
+    this.loading = true;
     this.authService.loadMyBooks().subscribe({
       next: (response) => {
         this.books = response;
         this.loadingBooks = false;
+        this.loading = false;
       },
       error: (err) => {
+        this.loading = false;
         console.error('Failed to load books:', err);
         this.loadingBooks = false;
         // this.router.navigate(['/error']);
@@ -159,12 +168,15 @@ export class SellABookComponent implements OnInit {
   }
 
   deleteBook(id: string) {
+    this.loading = true;
     this.authService.deleteBook(id).subscribe({
       next: (response) => {
         console.log('Book deleted successfully:', response);
         this.books = this.books.filter((book: any) => book._id !== id);
+        this.loading = false;
       },
       error: (err) => {
+        this.loading = false;
         console.error('Failed to delete book:', err);
         // this.router.navigate(['/error']);
       },
@@ -239,7 +251,7 @@ export class SellABookComponent implements OnInit {
 
   updateBook() {
     if (!this.selectedBookId) return;
-
+    this.loading = true;
     const formData = new FormData();
     formData.append('title', this.editBookForm.value.title);
     formData.append('author', this.editBookForm.value.author);
@@ -263,8 +275,10 @@ export class SellABookComponent implements OnInit {
         bootstrap.Modal.getInstance(
           document.getElementById('editBookModal')
         ).hide();
+        this.loading = false;
       },
       (error) => {
+        this.loading = false;
         console.error('Error updating book:', error);
         alert('Failed to update book. Please try again later.');
         // this.router.navigate(['/error']);

@@ -6,6 +6,7 @@ import { HeaderComponent } from '../../Component/Home/header/header.component';
 import { FooterComponent } from '../../Component/Home/footer/footer.component';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../Services/authService';
+import { LoaderComponent } from '../Extra-Screens/loader/loader.component';
 
 @Component({
   selector: 'app-categories',
@@ -14,7 +15,7 @@ import { AuthService } from '../../Services/authService';
     FooterComponent,
     CommonModule,
     FormsModule,
-    // RouterLink,
+    LoaderComponent,
   ],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.css'],
@@ -30,6 +31,7 @@ export class CategoriesComponent implements OnInit {
   selectedCategories: Set<number> = new Set();
   filteredBooks: any[] = [];
   categoryName: string = '';
+  loading: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -48,6 +50,7 @@ export class CategoriesComponent implements OnInit {
         // this.router.navigate(['/login']);
       },
     });
+    this.loading = true;
     this.loadBooks();
     console.log('this is the category name', this.categoryName);
     this.authService.getCategories().subscribe({
@@ -55,6 +58,7 @@ export class CategoriesComponent implements OnInit {
         this.categories = response;
       },
       error: () => {
+        this.loading = false;
         console.error('Failed to fetch categories');
         // this.router.navigate(['/error']);
       },
@@ -125,6 +129,7 @@ export class CategoriesComponent implements OnInit {
 
   loadBooks() {
     if (this.types) {
+      this.loading = true;
       this.authService.loadAllBooks().subscribe({
         next: (response) => {
           this.allBooks = response.books;
@@ -133,8 +138,10 @@ export class CategoriesComponent implements OnInit {
           if (this.selectedCategories.size > 0) {
             this.filterBooks();
           }
+          this.loading = false;
         },
         error: (err) => {
+          this.loading = false;
           this.allBooks = [];
           this.displayedBooks = [];
           this.filteredBooks = [];
@@ -144,6 +151,7 @@ export class CategoriesComponent implements OnInit {
         },
       });
     } else {
+      this.loading = true;
       this.authService.validateToken().subscribe(
         () => {
           this.authService.myPurchases().subscribe({
@@ -151,8 +159,10 @@ export class CategoriesComponent implements OnInit {
               this.allBooks = response.books;
               this.displayedBooks = [...this.allBooks];
               this.filteredBooks = [...this.allBooks];
+              this.loading = false;
             },
             error: (err) => {
+              this.loading = false;
               this.allBooks = [];
               this.displayedBooks = [];
               this.filteredBooks = [];

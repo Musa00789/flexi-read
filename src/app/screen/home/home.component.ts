@@ -5,6 +5,7 @@ import { CategoriesComponent } from '../../Component/Home/categories/categories.
 import { FooterComponent } from '../../Component/Home/footer/footer.component';
 import { AuthService } from '../../Services/authService';
 import { Router } from '@angular/router';
+import { LoaderComponent } from '../Extra-Screens/loader/loader.component';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
     HeroComponent,
     CategoriesComponent,
     FooterComponent,
+    LoaderComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',

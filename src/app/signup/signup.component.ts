@@ -4,15 +4,17 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../Services/authService';
+import { LoaderComponent } from '../screen/Extra-Screens/loader/loader.component';
 
 @Component({
   selector: 'app-signup',
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, LoaderComponent],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent implements OnInit {
   signupForm: FormGroup | any;
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -41,6 +43,7 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     if (this.signupForm.valid) {
+      this.loading = true;
       const formData = this.signupForm.value;
       if (formData.email === 'mmusadar@gmail.com') {
         this.authService
@@ -57,6 +60,7 @@ export class SignupComponent implements OnInit {
               this.router.navigate(['/login']);
             },
             (error) => {
+              this.loading = false;
               console.error('Signup failed', error);
               alert(error.error.message || 'Signup failed');
             }
@@ -76,6 +80,7 @@ export class SignupComponent implements OnInit {
               this.router.navigate(['/login']);
             },
             (error) => {
+              this.loading = false;
               console.error('Signup failed', error);
               alert(error.error.message || 'Signup failed');
             }

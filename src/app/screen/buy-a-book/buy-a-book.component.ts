@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from '../../Component/Home/footer/footer.component';
 import { HeaderComponent } from '../../Component/Home/header/header.component';
+import { LoaderComponent } from '../Extra-Screens/loader/loader.component';
 
 declare var bootstrap: any;
 
@@ -18,6 +19,7 @@ declare var bootstrap: any;
     FooterComponent,
     RouterLink,
     HeaderComponent,
+    LoaderComponent,
   ],
   styleUrls: ['./buy-a-book.component.css'],
 })
@@ -38,6 +40,7 @@ export class BuyABookComponent implements OnInit {
   reviewSuccessMessage: string = '';
   reviewErrorMessage: string = '';
   submittingReview: boolean = false;
+  loading: boolean = false;
   /////////////////
 
   constructor(
@@ -58,6 +61,7 @@ export class BuyABookComponent implements OnInit {
         this.router.navigate(['/login']); // Redirect to login if invalid
       },
     });
+    this.loading = true;
     this.bookId = this.route.snapshot.paramMap.get('id') || '';
     if (this.bookId) this.getBookDetails(this.bookId);
     this.getUserPoints();
@@ -65,11 +69,14 @@ export class BuyABookComponent implements OnInit {
   }
 
   getBookDetails(id: string) {
+    this.loading = true;
     this.authService.getBook(id).subscribe(
       (data: any) => {
         this.book = data;
+        this.loading = false;
       },
       (error) => {
+        this.loading = false;
         console.error('Failed to fetch book details', error);
         this.router.navigate(['/error']);
       }
@@ -77,12 +84,15 @@ export class BuyABookComponent implements OnInit {
   }
 
   getUserPoints() {
+    this.loading = true;
     this.authService.getUserPoints().subscribe(
       (data: any) => {
         this.points = data.points;
         this.hasPoints = this.points >= (this.book?.price || 0);
+        this.loading = false;
       },
       (error) => {
+        this.loading = false;
         // this.router.navigate(['/error']);
         console.error('Failed to fetch user points', error);
       }
@@ -90,11 +100,14 @@ export class BuyABookComponent implements OnInit {
   }
 
   loadSuggestedBooks() {
+    this.loading = true;
     this.authService.loadAllBooks().subscribe(
       (data: any) => {
         this.suggestedBooks = data.books;
+        this.loading = false;
       },
       (error) => {
+        this.loading = false;
         console.error('Failed to fetch suggested books', error);
       }
     );
@@ -106,13 +119,16 @@ export class BuyABookComponent implements OnInit {
   }
 
   usePointsForCheckout() {
+    this.loading = true;
     this.authService.purchaseBook(this.book?._id).subscribe(
       (response: any) => {
-        alert(`Successfully purchased "${response.book?.title}"!`);
         this.points = response.remainingPoints;
         this.hasPoints = this.points >= this.book?.points;
+        this.loading = false;
+        alert(`Successfully purchased "${response.book?.title}"!`);
       },
       (error) => {
+        this.loading = false;
         alert('Purchase failed: ' + error.error.message);
         // this.router.navigate(['/error']);
       }
@@ -128,12 +144,15 @@ export class BuyABookComponent implements OnInit {
   }
 
   fetchReviews() {
+    this.loading = true;
     // Example using your BookService or ReviewService:
     this.authService.getReviews(this.book?._id).subscribe({
       next: (data: any) => {
         this.reviews = data;
+        this.loading = false;
       },
       error: (err) => {
+        this.loading = false;
         console.error('Error fetching reviews:', err);
         // this.router.navigate(['/error']);
       },
@@ -143,14 +162,18 @@ export class BuyABookComponent implements OnInit {
   submitReview(form: any) {
     if (form.invalid) return;
     this.submittingReview = true;
+    this.loading = true;
     this.authService.addReview(this.book._id, this.newReview).subscribe({
       next: (response) => {
         this.reviewSuccessMessage = 'Review added successfully!';
         this.newReview = { rating: null, comment: '' };
         this.fetchReviews();
         this.submittingReview = false;
+        this.loading = false;
       },
       error: (err) => {
+        this.loading = false;
+        console.error('Failed to add review:', err);
         this.reviewErrorMessage = err.error?.message || 'Failed to add review.';
         this.submittingReview = false;
         // this.router.navigate(['/error']);

@@ -1,5 +1,5 @@
 <div class="auth-container">
-  <div *ngIf="!loading" class="form-container">
+  <div class="form-container">
     <img src="non-fictional.jpg" alt="BookStore Logo" class="logo" />
     <h2>Welcome Back!</h2>
     <p>Please login to your account</p>
@@ -70,7 +70,7 @@
       Don't have an account? Sign up
     </button>
   </div>
-  <div *ngIf="loading">
-    <app-loader></app-loader>
-  </div>
+  <!-- <div> -->
+  <!-- </div> -->
 </div>
+<app-loader *ngIf="loading"></app-loader>
