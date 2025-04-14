@@ -46,7 +46,24 @@
           </p>
         </div>
       </div>
-      <div style="display: flex; justify-content: center; margin-top: 2rem">
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          margin-top: 2rem;
+          flex-direction: column;
+        "
+      >
+        <h5>Bio:</h5>
+
+        <p style="margin-left: 20px">
+          {{ user?.aboutAuthor }} Lorem ipsum, dolor sit amet consectetur
+          adipisicing elit. Similique, maiores veniam, soluta sit, doloribus
+          fuga tempora necessitatibus ea minima aut eum facere nihil
+          voluptatibus commodi quibusdam odio. Similique, esse explicabo!
+        </p>
+      </div>
+      <div style="display: flex; justify-content: center; margin-top: 1rem">
         <button
           [routerLink]="['/profile/topup-account', user?._id]"
           class="btn btn-warning mt-2 m-md-1"
@@ -156,6 +173,16 @@
                 id="username"
                 [(ngModel)]="editUser.username"
                 name="username"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="aboutAuthor" class="form-label">About Author</label>
+              <input
+                type="text"
+                class="form-control"
+                id="aboutAuthor"
+                [(ngModel)]="editUser.aboutAuthor"
+                name="aboutAuthor"
               />
             </div>
 

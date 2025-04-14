@@ -58,7 +58,7 @@ export class BuyABookComponent implements OnInit {
       },
       error: (err) => {
         console.error('Token validation failed', err);
-        this.router.navigate(['/login']); // Redirect to login if invalid
+        this.router.navigate(['/login']);
       },
     });
     this.loading = true;
@@ -66,6 +66,7 @@ export class BuyABookComponent implements OnInit {
     if (this.bookId) this.getBookDetails(this.bookId);
     this.getUserPoints();
     this.loadSuggestedBooks();
+    this.fetchReviews();
   }
 
   getBookDetails(id: string) {
@@ -146,7 +147,7 @@ export class BuyABookComponent implements OnInit {
   fetchReviews() {
     this.loading = true;
     // Example using your BookService or ReviewService:
-    this.authService.getReviews(this.book?._id).subscribe({
+    this.authService.getReviews(this.bookId).subscribe({
       next: (data: any) => {
         this.reviews = data;
         this.loading = false;

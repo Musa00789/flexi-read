@@ -53,6 +53,7 @@ export class SellABookComponent implements OnInit {
       title: ['', Validators.required],
       author: ['', Validators.required],
       category: [[], Validators.required],
+      aboutBook: ['', Validators.required],
       price: [, [Validators.required, Validators.min(1)]],
       rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
       points: [10, [Validators.required, Validators.min(1)]],
@@ -64,6 +65,7 @@ export class SellABookComponent implements OnInit {
       title: ['', Validators.required],
       author: ['', Validators.required],
       category: [[], Validators.required],
+      aboutBook: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(1)]],
     });
   }
@@ -99,6 +101,7 @@ export class SellABookComponent implements OnInit {
       const formData = new FormData();
       formData.append('title', this.sellBookForm.get('title').value);
       formData.append('author', this.sellBookForm.get('author').value);
+      formData.append('aboutBook', this.sellBookForm.get('aboutBook').value);
       formData.append('category', this.sellBookForm.get('category').value);
       formData.append('price', this.sellBookForm.get('price').value);
       formData.append('rating', this.sellBookForm.get('rating').value);
@@ -232,6 +235,7 @@ export class SellABookComponent implements OnInit {
     this.editBookForm.patchValue({
       title: book.title,
       author: book.author,
+      aboutBook: book.aboutBook,
       category: book.category.map((cat: any) => cat._id),
       price: book.price,
     });
@@ -255,6 +259,7 @@ export class SellABookComponent implements OnInit {
     const formData = new FormData();
     formData.append('title', this.editBookForm.value.title);
     formData.append('author', this.editBookForm.value.author);
+    formData.append('aboutBook', this.editBookForm.value.aboutBook);
     formData.append(
       'category',
       this.editBookForm.get('category').value === null

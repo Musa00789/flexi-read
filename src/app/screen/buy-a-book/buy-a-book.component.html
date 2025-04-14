@@ -35,37 +35,17 @@
         </div>
       </div>
       <div>
-        <h1>Description</h1>
-        <h3>About the Author</h3>
-        <h3>About the Book</h3>
+        <h3>Description</h3>
+        <!-- <h5>About the Author</h5> -->
+        <!-- <p>{{ this.user.aboutAuthor }}</p> -->
+        <h5>About the Book</h5>
+        <p>{{ this.book.aboutBook }}</p>
       </div>
 
       <!-- Review Section -->
       <div class="review-section mt-4">
         <h3>Ratings & Reviews</h3>
         <!-- Existing Reviews List -->
-        <div
-          class="reviews-list"
-          *ngIf="reviews && reviews.length; else noReviews"
-        >
-          <div class="review" *ngFor="let review of reviews">
-            <div class="review-header">
-              <span class="review-user">{{
-                review.userName || "Anonymous"
-              }}</span>
-              <span class="review-rating">Rating: {{ review.rating }}/5</span>
-            </div>
-            <div class="review-comment">
-              {{ review.comment }}
-            </div>
-            <div class="review-date">
-              {{ review.createdAt | date : "medium" }}
-            </div>
-          </div>
-        </div>
-        <ng-template #noReviews>
-          <p>No reviews yet. Be the first to review this book!</p>
-        </ng-template>
 
         <!-- New Review Form -->
         <form #reviewForm="ngForm" (ngSubmit)="submitReview(reviewForm)">
@@ -103,6 +83,34 @@
             Submit Review
           </button>
         </form>
+        <div
+          class="reviews-list"
+          *ngIf="reviews && reviews.length; else noReviews"
+        >
+          <div class="review" *ngFor="let review of reviews">
+            <div class="review-header">
+              <h6>
+                <span class="review-user">{{
+                  review.userName || "Anonymous"
+                }}</span>
+              </h6>
+              <span class="review-rating">Rating: {{ review.rating }}/5</span>
+            </div>
+            <div class="review-comment">
+              {{ review.comment }}
+              <span style="opacity: 0.7; margin-left: 60px">{{
+                review.createdAt | date : "medium"
+              }}</span>
+            </div>
+            <!-- <div class="review-date">
+              {{ review.createdAt | date : "medium" }}
+            </div> -->
+          </div>
+        </div>
+        <ng-template #noReviews>
+          <p>No reviews yet. Be the first to review this book!</p>
+        </ng-template>
+
         <!-- ///////////////////////////////////////////// -->
         <div class="message success" *ngIf="reviewSuccessMessage">
           {{ reviewSuccessMessage }}

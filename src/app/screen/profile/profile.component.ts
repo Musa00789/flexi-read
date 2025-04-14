@@ -25,7 +25,12 @@ declare var bootstrap: any;
 })
 export class ProfileComponent implements OnInit {
   user: any;
-  editUser: any = { username: '', password: '', confirmPassword: '' };
+  editUser: any = {
+    username: '',
+    aboutAuthor: '',
+    password: '',
+    confirmPassword: '',
+  };
   orders: any;
   pointsToAdd: number = 0;
   showEditIcon = false;
@@ -152,6 +157,9 @@ export class ProfileComponent implements OnInit {
     const updateData: any = { username: this.editUser.username };
     if (this.editUser.password) {
       updateData.password = this.editUser.password;
+    }
+    if (this.editUser.aboutAuthor) {
+      updateData.aboutAuthor = this.editUser.aboutAuthor;
     }
 
     this.authService.updateProfile(this.user._id, updateData).subscribe({

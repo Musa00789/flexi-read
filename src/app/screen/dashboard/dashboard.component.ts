@@ -34,6 +34,7 @@ export class DashboardComponent implements OnInit {
   loading: boolean = false;
   loader: boolean = false;
   hasMoreBooks: boolean = true;
+  randomBooks: any[] = [];
 
   ngOnInit() {
     this.authService.validateToken().subscribe({
@@ -61,6 +62,7 @@ export class DashboardComponent implements OnInit {
       },
     });
     this.myPurchases();
+    this.getRandomBooks();
   }
 
   loadBooks() {
@@ -74,6 +76,22 @@ export class DashboardComponent implements OnInit {
       this.loading = false;
     });
   }
+
+  getRandomBooks() {
+    this.loader = true;
+    this.authService.randomBooks().subscribe({
+      next: (response) => {
+        this.randomBooks = response;
+        console.log('Random books loaded.');
+        this.loader = false;
+      },
+      error: (err) => {
+        this.loader = false;
+        console.log('error fetching random books: ' + err);
+      },
+    });
+  }
+
   myPurchases() {
     this.authService.myPurchases().subscribe({
       next: (response) => {

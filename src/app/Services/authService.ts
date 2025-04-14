@@ -190,6 +190,14 @@ export class AuthService {
     return this.http.get(`${this.baseUrlUser}/getBook/${id}`, { headers });
   }
 
+  randomBooks(): Observable<any> {
+    const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.get(`${this.baseUrlUser}/randomBooks`, { headers });
+  }
+
   // Upload a new book
   uploadBook(data: FormData): Observable<any> {
     const token = localStorage.getItem('token');

@@ -151,3 +151,10 @@
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+.reviews-list {
+  border-top: 2px solid #ccc;
+  margin-top: 5px;
+}
+.review {
+  border-bottom: 1px solid #ccc;
+}

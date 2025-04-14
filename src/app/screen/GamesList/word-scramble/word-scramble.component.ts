@@ -92,9 +92,9 @@ export class WordScrambleComponent implements OnInit {
   ): Observable<{ awarded: number; message: string }> {
     return new Observable((observer) => {
       this.authService.getUserPoints().subscribe((response) => {
-        const currentPoints = response?.points || 0; // Ensure it's a number
-        console.log('Current Points:', currentPoints); // Debug log
-        console.log('Points to Award:', pointsToAward); // Debug log
+        const currentPoints = response?.points || 0;
+        console.log('Current Points:', currentPoints);
+        console.log('Points to Award:', pointsToAward);
         const remaining = this.DAILY_POINT_LIMIT - currentPoints;
         // if (remaining <= 0) {
         //   observer.next({ awarded: 0, message: '⚠️ Daily limit reached' });
@@ -103,11 +103,11 @@ export class WordScrambleComponent implements OnInit {
         // }
 
         const finalAward = Math.min(pointsToAward, remaining);
-        const newPoints = currentPoints + finalAward;
-        console.log('New Points:', newPoints); // Debug log'
-        console.log('Final Award:', finalAward); // Debug log
+        const newPoints = currentPoints + 10; // finalAward;
+        console.log('New Points:', newPoints);
+        console.log('Final Award:', finalAward);
 
-        this.authService.addPoints(newPoints).subscribe(
+        this.authService.addPoints(10).subscribe(
           () => {
             observer.next({
               awarded: finalAward,
