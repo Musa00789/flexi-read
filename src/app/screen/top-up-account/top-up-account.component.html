@@ -3,33 +3,6 @@
   <div class="topup-card">
     <h2>Top Up Your Account</h2>
     <form [formGroup]="topupForm" (ngSubmit)="submitTopup()">
-      <!-- Card Number Input Field -->
-      <div class="form-group">
-        <label for="cardNumber">Card Number</label>
-        <input
-          id="cardNumber"
-          type="text"
-          formControlName="cardNumber"
-          placeholder="1234 5678 9012 3456"
-          (input)="formatCardNumber($event)"
-        />
-        <div
-          class="error"
-          *ngIf="
-            topupForm.get('cardNumber')?.touched &&
-            topupForm.get('cardNumber')?.invalid
-          "
-        >
-          <small *ngIf="topupForm.get('cardNumber')?.errors?.['required']"
-            >Card number is required.</small
-          >
-          <small *ngIf="topupForm.get('cardNumber')?.errors?.['pattern']">
-            Card number must be 16 digits (e.g., 1234 5678 9012 3456).
-          </small>
-        </div>
-      </div>
-
-      <!-- Cardholder Name -->
       <div class="form-group">
         <label for="cardholderName">Cardholder Name</label>
         <input
@@ -38,67 +11,8 @@
           formControlName="cardholderName"
           placeholder="Enter cardholder's name"
         />
-        <div
-          class="error"
-          *ngIf="
-            topupForm.get('cardholderName')?.touched &&
-            topupForm.get('cardholderName')?.invalid
-          "
-        >
-          <small *ngIf="topupForm.get('cardholderName')?.errors?.['required']"
-            >Cardholder name is required.</small
-          >
-        </div>
       </div>
 
-      <!-- Expiry Date Input Field -->
-      <div class="form-group">
-        <label for="expiryDate">Expiry Date (YYYY/MM)</label>
-        <input
-          id="expiryDate"
-          type="text"
-          formControlName="expiryDate"
-          placeholder="e.g., 2025/08"
-        />
-        <div
-          class="error"
-          *ngIf="
-            topupForm.get('expiryDate')?.touched &&
-            topupForm.get('expiryDate')?.invalid
-          "
-        >
-          <small *ngIf="topupForm.get('expiryDate')?.errors?.['required']"
-            >Expiry date is required.</small
-          >
-          <small *ngIf="topupForm.get('expiryDate')?.errors?.['pattern']">
-            Invalid format. Use YYYY/MM.
-          </small>
-        </div>
-      </div>
-
-      <!-- CVV Input Field -->
-      <div class="form-group">
-        <label for="cvv">CVV</label>
-        <input
-          id="cvv"
-          type="number"
-          formControlName="cvv"
-          placeholder="Enter 3-digit CVV"
-        />
-        <div
-          class="error"
-          *ngIf="topupForm.get('cvv')?.touched && topupForm.get('cvv')?.invalid"
-        >
-          <small *ngIf="topupForm.get('cvv')?.errors?.['required']"
-            >CVV is required.</small
-          >
-          <small *ngIf="topupForm.get('cvv')?.errors?.['pattern']">
-            CVV must be exactly 3 digits.
-          </small>
-        </div>
-      </div>
-
-      <!-- Amount Input Field -->
       <div class="form-group">
         <label for="amount">Amount to Top Up</label>
         <input
@@ -107,29 +21,24 @@
           formControlName="amount"
           placeholder="Enter amount"
         />
-        <div
-          class="error"
-          *ngIf="
-            topupForm.get('amount')?.touched && topupForm.get('amount')?.invalid
-          "
-        >
-          <small *ngIf="topupForm.get('amount')?.errors?.['required']"
-            >Amount is required.</small
-          >
-          <small *ngIf="topupForm.get('amount')?.errors?.['min']"
-            >Minimum amount is 1.</small
-          >
-        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="card-element">Card Info</label>
+        <div id="card-element" class="stripe-card-input"></div>
       </div>
 
       <button type="submit" [disabled]="loading || topupForm.invalid">
-        Top Up
+        Pay with Card
       </button>
     </form>
+
     <div class="message success" *ngIf="successMessage">
       {{ successMessage }}
     </div>
-    <div class="message error" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div class="message error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
   </div>
 </div>
 <app-footer></app-footer>

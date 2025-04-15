@@ -348,4 +348,16 @@ export class AuthService {
       { headers }
     );
   }
+
+  doPayment(amount: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.post(
+      `${this.baseUrlUser}/payment`,
+      { amount },
+      { headers }
+    );
+  }
 }
