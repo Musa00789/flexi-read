@@ -323,4 +323,29 @@ export class AuthService {
       { headers }
     );
   }
+
+  getSummary(text: string) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.post<{ summary: string }>(
+      `${this.baseUrlUser}/summarize`,
+      { text },
+      { headers }
+    );
+  }
+  ///////////////////////////////////test
+  getExpanded(text: string): Observable<any> {
+    console.log('summary');
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.post(
+      `${this.baseUrlUser}/getSummary`,
+      { text },
+      { headers }
+    );
+  }
 }

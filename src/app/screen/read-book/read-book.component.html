@@ -1,22 +1,52 @@
 <app-header></app-header>
+
 <div class="page-container">
   <div class="book-reader">
     <div class="book">
+      <!-- LEFT PAGE -->
       <div
-        (click)="prevPages()"
         class="page left-page"
+        (click)="prevPages()"
+        [class.active]="selectedPage === currentPage"
         [ngClass]="{ 'flip-prev': isLeftFlippingPrev }"
       >
         <canvas #leftCanvas></canvas>
+        <div
+          class="overlay"
+          (click)="
+            selectPage(currentPage); toggleRead(); $event.stopPropagation()
+          "
+        >
+          <ng-container *ngIf="!isReading">▶️</ng-container>
+          <ng-container *ngIf="isReading && pageToRead === currentPage"
+            >⏸️</ng-container
+          >
+        </div>
       </div>
+
+      <!-- RIGHT PAGE -->
       <div
-        (click)="nextPages()"
         class="page right-page"
+        *ngIf="currentPage + 1 <= totalPages"
+        (click)="nextPages()"
+        [class.active]="selectedPage === currentPage + 1"
         [ngClass]="{ 'flip-next': isRightFlippingNext }"
       >
         <canvas #rightCanvas></canvas>
+        <div
+          class="overlay"
+          (click)="
+            selectPage(currentPage + 1); toggleRead(); $event.stopPropagation()
+          "
+        >
+          <ng-container *ngIf="!isReading">▶️</ng-container>
+          <ng-container *ngIf="isReading && pageToRead === currentPage + 1"
+            >⏸️</ng-container
+          >
+        </div>
       </div>
     </div>
+
     <div class="controls">
       <button (click)="prevPages()" [disabled]="currentPage === 1">
         Previous
@@ -24,8 +54,24 @@
       <button (click)="nextPages()" [disabled]="currentPage + 1 >= totalPages">
         Next
       </button>
+      <hr />
+      <button (click)="summarizeCurrentPage()">🧠 Summarize Page</button>
+      <input
+        [(ngModel)]="selectedSentence"
+        placeholder="Enter sentence to expand"
+      />
+      <button (click)="selectedSentence && expandSentence(selectedSentence)">
+        📈 Expand
+      </button>
     </div>
   </div>
+
+  <div class="summary-box" *ngIf="showSummary">
+    <h3>🧠 Page Summary</h3>
+    <p>{{ summaryText }}</p>
+    <button (click)="showSummary = false">Close</button>
+  </div>
 </div>
+
 <app-footer></app-footer>
 <app-loader *ngIf="loading"></app-loader>
