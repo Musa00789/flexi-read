@@ -19,6 +19,7 @@ import { ComingSoonComponent } from './screen/Extra-Screens/coming-soon/coming-s
 import { BecomeAWriterComponent } from './screen/Extra-Screens/become-a-writer/become-a-writer.component';
 import { ReadBookComponent } from './screen/read-book/read-book.component';
 import { ErrorScreenComponent } from './screen/Extra-Screens/error-screen/error-screen.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -83,6 +84,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   { path: 'signup', component: SignupComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'error', component: ErrorScreenComponent },
   {
     path: 'bewriter',

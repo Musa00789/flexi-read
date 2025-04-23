@@ -206,12 +206,10 @@ export class ReadBookComponent implements OnInit {
 
       const current = this.pageToRead!;
 
-      // Auto-flip pages if needed
       if (current < this.currentPage || current > this.currentPage + 1) {
         this.currentPage = current % 2 === 0 ? current - 1 : current;
         await this.renderCurrentPages();
 
-        // Smooth page flip animation
         if (current > this.currentPage + 1) {
           this.isRightFlippingNext = true;
           setTimeout(() => (this.isRightFlippingNext = false), 800);

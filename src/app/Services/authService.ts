@@ -78,6 +78,10 @@ export class AuthService {
     return this.http.post(`${this.baseUrlUser}/signup`, updatedCredentials);
   }
 
+  sendPasswordReset(email: string): Observable<any> {
+    return this.http.post(`${this.baseUrlUser}/forgotPassword`, email);
+  }
+
   validateToken(): Observable<any> {
     try {
       if (!this.isBrowser()) {
