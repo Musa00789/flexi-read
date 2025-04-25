@@ -1,8 +1,13 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+
+interface ChatResponse {
+  session_id: string;
+  reply: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +20,7 @@ export class AuthService {
   ) {}
 
   private baseUrlUser = 'http://localhost:5000/api/auth';
+  private sessionId: string | null = null;
   // private baseUrlAdmin = 'http://localhost:5000/api/admin';
 
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
@@ -340,18 +346,18 @@ export class AuthService {
     );
   }
   ///////////////////////////////////test
-  getExpanded(text: string): Observable<any> {
-    console.log('summary');
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post(
-      `${this.baseUrlUser}/getSummary`,
-      { text },
-      { headers }
-    );
-  }
+  // getExpanded(text: string): Observable<any> {
+  //   console.log('summary');
+  //   const token = localStorage.getItem('token');
+  //   const headers = new HttpHeaders({
+  //     Authorization: `Bearer ${token}`,
+  //   });
+  //   return this.http.post(
+  //     `${this.baseUrlUser}/getSummary`,
+  //     { text },
+  //     { headers }
+  //   );
+  // }
 
   doPayment(amount: any): Observable<any> {
     const token = localStorage.getItem('token');
@@ -363,5 +369,28 @@ export class AuthService {
       { amount },
       { headers }
     );
+  }
+
+  sendMessage(message: string): Observable<ChatResponse> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http
+      .post<ChatResponse>(
+        `${this.baseUrlUser}/api/chat`,
+        {
+          session_id: this.sessionId,
+          message: message,
+        },
+        { headers }
+      )
+      .pipe(
+        tap((res) => {
+          // persist the session ID for follow-up messages
+          this.sessionId = res.session_id;
+        })
+      );
   }
 }

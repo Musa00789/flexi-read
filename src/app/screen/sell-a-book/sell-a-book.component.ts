@@ -115,8 +115,10 @@ export class SellABookComponent implements OnInit {
       this.authService.uploadBook(formData).subscribe({
         next: (response) => {
           console.log('Book uploaded successfully:', response);
-          this.authService.loadMyBooks();
+
           this.sellBookForm.reset();
+          this.authService.loadMyBooks();
+          this.loadBooks();
           this.closeUploadModal();
         },
         error: (err) => {

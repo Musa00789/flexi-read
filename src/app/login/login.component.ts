@@ -66,4 +66,10 @@ export class LoginComponent implements OnInit {
       }
     }
   }
+
+  onForgotPassword() {
+    alert('Please contact the admin to reset your password.');
+
+    // this.router.navigate(['/forgot-password']);
+  }
 }

@@ -60,7 +60,8 @@
         [(ngModel)]="selectedSentence"
         placeholder="Enter sentence to expand"
       />
-      <button (click)="selectedSentence && expandSentence(selectedSentence)">
+      <button (click)="selectedSentence && openExpandModal(selectedSentence)">
+        <!-- (click)="selectedSentence && expandSentence(selectedSentence)"> -->
         📈 Expand
       </button>
     </div>
@@ -70,6 +71,35 @@
     <h3>🧠 Page Summary</h3>
     <p>{{ summaryText }}</p>
     <button (click)="showSummary = false">Close</button>
+  </div>
+
+  <!-- Expand / Chat Modal -->
+  <div class="modal-backdrop" *ngIf="showExpandModal"></div>
+  <div class="chat-widget" *ngIf="showExpandModal">
+    <div class="chat-header">
+      <span>AI Chat</span>
+      <button class="bg-danger" (click)="closeExpandModal()">X</button>
+    </div>
+    <div class="chat-body">
+      <div
+        *ngFor="let m of expandChatMessages"
+        class="chat-msg"
+        [ngClass]="m.from"
+      >
+        <strong *ngIf="m.from === 'bot'">🤖</strong>
+        <strong *ngIf="m.from === 'user'">👤</strong>
+        {{ m.text }}
+      </div>
+    </div>
+    <div class="chat-footer">
+      <input
+        type="text"
+        [(ngModel)]="expandInput"
+        (keyup.enter)="sendExpandChat()"
+        placeholder="Type a message…"
+      />
+      <button (click)="sendExpandChat()">Send</button>
+    </div>
   </div>
 </div>
 

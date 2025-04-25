@@ -44,6 +44,10 @@ export class ReadBookComponent implements OnInit {
   summaryText: string | null = null;
   showSummary = false;
 
+  showExpandModal = false;
+  expandChatMessages: { from: 'user' | 'bot'; text: string }[] = [];
+  expandInput = '';
+
   @ViewChild('leftCanvas', { static: false })
   leftCanvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('rightCanvas', { static: false })
@@ -257,7 +261,49 @@ export class ReadBookComponent implements OnInit {
     });
   }
 
+  // expandSentence(sentence: string) {
+  //   this.authService.sendMessage(sentence).subscribe(
+  //     (response: any) => {
+  //       this.selectedSentence = response.message;
+  //       this.isReading = false;
+  //       speechSynthesis.cancel();
+  //     },
+  //     (error) => {
+  //       console.error('Error expanding sentence:', error);
+  //     }
+  //   );
+  // }
+
+  openExpandModal(initialSentence: string) {
+    this.showExpandModal = true;
+    this.expandChatMessages = [{ from: 'user', text: initialSentence }];
+    // call your one-shot expand API for first reply
+    this.expandSentence(initialSentence);
+  }
+
+  // override expandSentence to push a bot message then allow follow-ups
   expandSentence(sentence: string) {
-    console.log(sentence);
+    this.authService.sendMessage(sentence).subscribe((expansion) => {
+      this.expandChatMessages.push({ from: 'bot', text: expansion.reply });
+    });
+  }
+
+  // send follow-up via your chat service
+  sendExpandChat() {
+    if (!this.expandInput.trim()) return;
+    const msg = this.expandInput.trim();
+    this.expandChatMessages.push({ from: 'user', text: msg });
+    this.expandInput = '';
+
+    // assume you have ChatService with sendMessage()
+    this.authService.sendMessage(msg).subscribe((res) => {
+      this.expandChatMessages.push({ from: 'bot', text: res.reply });
+    });
+  }
+
+  closeExpandModal() {
+    this.showExpandModal = false;
+    this.expandInput = '';
+    this.expandChatMessages = [];
   }
 }
