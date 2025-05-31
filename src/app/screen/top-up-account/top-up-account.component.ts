@@ -57,7 +57,7 @@ export class TopUpAccountComponent implements OnInit {
     });
 
     this.stripe = await loadStripe(
-      'pk_test_51Qmx7ZDw4CiChweonZ693r0BWP2ODTG0rZlq8RuJR1vJwpZxVfGCVhvICxMU5fLdvyK04YDLhhGJNzY6V7E7nZCF00s3uqO3XG'
+      'YOUR_STRIPE_KEY'
     );
     if (this.stripe) {
       this.elements = this.stripe.elements();
